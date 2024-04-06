@@ -1,0 +1,14 @@
+.cache/
+auto-save-list/
+config.el
+places
+history
+elpa/
+lisp/
+org-persist/
+transient/
+auto-save-list/
+#*#
+*.elc
+compilation-mode-truncate-lines
+.DS_Store/

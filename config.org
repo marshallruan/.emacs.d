@@ -1,0 +1,262 @@
+* 1. 包管理器
+#+begin_src emacs-lisp
+  (use-package package
+    :config
+  (add-to-list 'package-archives '("melepa" . "https://melpa.org/packages/")))
+#+end_src
+
+* 2. UI相关
+** 2.1 基本UI
+#+begin_src emacs-lisp
+	  (tool-bar-mode -1)
+
+	  (scroll-bar-mode -1)
+
+	  ;滚动条优化
+	  (use-package good-scroll
+	    :ensure t
+	    :if window-system
+	    :init
+	    (good-scroll-mode))
+
+	  (global-display-line-numbers-mode)
+
+	  ;在Mode Line上显示列号
+	  (column-number-mode t)
+
+	  ;设置windows字体
+	  (set-face-attribute 'default nil :font "consolas-14:weight=normal")
+	  (dolist (charset '(kana han cjk-misc bopomofo))
+	    (set-fontset-font (frame-parameter nil 'font)
+			      charset
+			      (font-spec :family "SimSun" :size 32)))
+
+	  ;更改光标样式
+	  (setq-default cursor-type 'bar)
+
+	  ;关闭启动帮助画面
+	  (setq inhibit-splash-screen 1)
+
+	  ;高亮当前行
+	  (global-hl-line-mode 1)
+
+	  (setq ring-bell-funciton 'ignore)
+
+
+
+	  ;增强C-a和C-e快捷键
+	  ;(use-package mwim
+	   ; :ensure t
+	    ;:bind
+	   ; (("C-a" . mwim-begining-of-code-or-line)
+	    ; ("C-e" . mwim-end-of-code-or-line)))
+	  ;多级括号
+	  (use-package rainbow-delimiters
+	    :ensure t
+	    :hook
+	    (prog-mode . rainbow-delimiters-mode))
+
+	  (use-package simple
+	    :ensure nil
+	    :hook
+	    (after-init . size-indication-mode)
+	    :init
+	    (progn
+	      (setq column-number-mode t)))
+
+	  (use-package doom-modeline
+	    :ensure t
+	    :init
+	    (doom-modeline-mode t))
+
+	  (use-package doom-themes
+	    :ensure t
+	    :config
+	    (setq doom-themes-enable-bold t
+		  doom-themes-enable-italic t)
+	    (load-theme 'doom-one t))
+#+end_src
+
+** 2.2 自动补全
+#+begin_src emacs-lisp
+	  (use-package company
+	    :ensure t
+	    :init
+	    (global-company-mode)
+	    :bind
+	    (:map company-active-map
+		  ("C-n" . 'company-select-next)
+		  ("C-p" . 'company-select-previous))
+	    :config
+	    (setq company-minimum-prefix-length 1)
+	    (setq company-tooltip-align-annotations t)
+	    (setq company-idle-delay 0.0)
+	    (setq company-show-numbers t)
+	    (setq company-selection-warp-around t)
+	    (setq company-transformers '(company-sort-by-occurrence)))
+
+	  (use-package company-box
+	    :ensure t
+	    :if window-system
+	    :hook
+	    (company-mode . company-box-mode))
+#+end_src
+
+** 2.3 minibuffer设定
+#+begin_src emacs-lisp
+  (use-package vertico
+    :ensure t
+    :config
+    (vertico-mode t))
+
+  (use-package orderless
+    :ensure t
+    :config
+    (setq completion-styles '(orderless)))
+
+  (use-package embark
+    :ensure t
+    :init
+    (setq prefix-help-command #'embark-prefix-help-command)
+    :config
+    (add-to-list 'display-buffer-alist
+		 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+		   nil
+		   (window-parameters (mode-line-format . none))))
+    :bind
+    (("C-." . embark-act)
+     ("C-;" . embark-dwim)
+     ("C-h B" . embark-bindings)))
+
+
+
+  (use-package marginalia
+    :ensure t
+    :config
+    (marginalia-mode t))
+
+  (use-package consult
+    :config
+    (global-set-key (kbd "C-s") 'consult-line)
+    (global-set-key (kbd "M-s") 'consult-imenu))
+#+end_src
+
+** 2.4 启动界面
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :hook
+    (after-init . projectile-mode)
+    :bind
+    (("C-c p" . projectile-command-map)))
+
+  (use-package dashboard
+    :ensure t
+    :config
+    (setq dashboard-banner-logo-title "Welcome to Emacs!")
+    (setq dashboard-projects-backend 'projectile)
+    (setq dashboard-startup-banner 'official)
+    (setq dashboard-items '((recent . 5)
+			    (bookmarks . 5)
+			    (projects . 10)))
+    (dashboard-setup-startup-hook))
+#+end_src
+
+* 3. emacs行为
+** 3.1 一般行为
+#+begin_src emacs-lisp
+  ;在关闭emacs前询问是否确认
+  (setq confirm-kill-emacs #'yes-or-no-p)
+  ;自动补全括号
+  (electric-pair-mode t)
+  ;编程模式下，光标在一个括号时高亮另外一个
+  (add-hook 'prog-mode-hook #'show-paren-mode)
+
+  ;当另一个程序更改文件后，Emacs及时刷新
+  (global-auto-revert-mode t)
+  ;选中文本时输入文本会替换文本
+  (delete-selection-mode t)
+  ;关闭文件自动备份
+  (setq make-backup-files nil)
+  ;编程模式下，可折叠代码块
+  (add-hook 'prog-mode-hook #'hs-minor-mode)
+
+#+end_src 
+** 3.2 打开历史文件，上次光标所在位置
+#+begin_src emacs-lisp
+(use-package savehist
+  :ensure nil
+  :hook
+  (after-init . savehist-mode)
+  :init
+  (setq enable-recursive-minibuffers t
+	history-length 1000
+	savehist-additional-variables '(mark-ring
+					global-mark-ring
+					search-ring
+					regexp-search-ring
+					extended-command-history)
+	savehist-autosave-interval 300))
+
+(use-package saveplace
+  :ensure nil
+  :hook
+  (after-init . save-place-mode))
+#+end_src
+
+** 3.3 增加重启emacs命令
+#+begin_src emacs-lisp
+(use-package restart-emacs
+  :ensure t)
+#+end_src
+
+** 3.4 优化undo操作
+#+begin_src emacs-lisp
+  (use-package undo-tree
+    :ensure t
+    :init
+    (global-undo-tree-mode)
+    :custom
+    (undo-tree-auto-save-history nil))
+#+end_src 
+
+* 4. 编程环境
+** 4.1 项目管理
+#+begin_src emacs-lisp
+  (use-package treemacs
+    :ensure t
+    :defer t
+    :config
+    (treemacs-tag-follow-mode)
+    :bind
+    (:map global-map
+	  ("M-0" . treemacs-select-window)
+	  ("C-x t 1" . treemacs-delete-other-windows)
+	  ("C-x t t" . treemacs)
+	  ("C-x t B" . treemacs-bookmark)
+	  ("C-x t M-t" . treemacs-find-tag))
+    (:map treemacs-mode-map
+	  ("/" . treemacs-advanced-helpful-hydra)))
+
+  (use-package treemacs-projectile
+    :ensure t
+    :after (treemacs projectile))
+
+  (use-package lsp-treemacs
+    :ensure t
+    :after (treemacs lsp))
+
+
+  ;git管理工具
+  (use-package magit
+    :ensure t)
+#+end_src
+** 4.2 python
+#+begin_src emacs-lisp
+  (use-package python
+    :defer t
+    :mode
+    ("\\.py\\'" . python-mode)
+    :interpreter
+    ("python3" . python-mode))
+#+end_src
