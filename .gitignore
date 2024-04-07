@@ -8,7 +8,10 @@ lisp/
 org-persist/
 transient/
 auto-save-list/
+font/
 #*#
+.#init.el
+*.eld
 *.elc
 compilation-mode-truncate-lines
 .DS_Store/
