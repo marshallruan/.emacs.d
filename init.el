@@ -6,4 +6,4 @@
   :config
   (setq org-src-preserve-indentation t))
 
-(org-babel-load-file (expand-file-name "config.org" user-emacs-directory)
+(org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
