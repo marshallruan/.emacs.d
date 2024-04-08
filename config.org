@@ -24,12 +24,13 @@
 ;在Mode Line上显示列号
 (column-number-mode t)
 
-;设置windows字体
-(set-face-attribute 'default nil :font "consolas-14:weight=normal")
+;设置字体
+(set-face-attribute 'default nil :font "iosevka-14:weight=normal")
+
 (dolist (charset '(kana han cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
 		    charset
-		    (font-spec :family "SimSun" :size 32)))
+		    (font-spec :family "Simsun" :size 34)))
 
 ;更改光标样式
 (setq-default cursor-type 'bar)
@@ -69,6 +70,9 @@
   :ensure t
   :init
   (doom-modeline-mode 1))
+
+(use-package all-the-icons
+  :ensure t)
 
 (use-package nerd-icons-ivy-rich
   :ensure t
@@ -151,10 +155,17 @@
   (marginalia-mode t))
 
 (use-package consult
+  :ensure t
   :config
   (global-set-key (kbd "C-s") 'consult-line)
   (global-set-key (kbd "M-s") 'consult-imenu))
+
+(use-package embark-consult
+  :ensure t
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
+
 
 ** 2.4 启动界面
 #+begin_src emacs-lisp

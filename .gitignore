@@ -13,5 +13,6 @@ font/
 .#init.el
 *.eld
 *.elc
+recentf
 compilation-mode-truncate-lines
 .DS_Store/
