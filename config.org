@@ -1,23 +1,16 @@
-* 1. 包管理器
+* 包管理器
 #+begin_src emacs-lisp
 ;设定软件源
 (use-package package
   :config
   (add-to-list 'package-archives '("melepa" . "https://melpa.org/packages/")))
 #+end_src
-* 2. UI相关
-** 2.1 基本UI
+* UI显示 
+** 基本UI显示
 #+begin_src emacs-lisp
 (tool-bar-mode -1)
 
 (scroll-bar-mode -1)
-
-;滚动条优化
-(use-package good-scroll
-  :ensure t
-  :if window-system
-  :init
-  (good-scroll-mode))
 
 (global-display-line-numbers-mode)
 
@@ -41,23 +34,21 @@
 ;高亮当前行
 (global-hl-line-mode 1)
 
-(setq ring-bell-funciton 'ignore)
-
-
-
-;增强C-a和C-e快捷键
-(use-package mwim
+;滚动条优化
+(use-package good-scroll
   :ensure t
-  :bind
-  (("C-a" . mwim-beginning-of-code-or-line)
-   ("C-e" . mwim-end-of-code-or-line)))
+  :if window-system
+  :init
+  (good-scroll-mode))
 
-;多级括号
+
+;多级彩虹括号
 (use-package rainbow-delimiters
   :ensure t
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
+;显示列号
 (use-package simple
   :ensure nil
   :hook
@@ -66,14 +57,23 @@
   (progn
     (setq column-number-mode t)))
 
+#+end_src
+
+** emacs主题
+#+begin_src emacs-lisp
 (use-package doom-modeline
   :ensure t
   :init
   (doom-modeline-mode 1))
 
+;安装需要的图标和字体
+;激活后安装字体可以 M-x all-the-icons-install-fonts
+;然后在操作系统中把下载的字体安装到系统字体
 (use-package all-the-icons
   :ensure t)
 
+;同上 M-x nerd-icons-install-fonts
+;然后在操作系统中把下载的字体安装到系统字体
 (use-package nerd-icons-ivy-rich
   :ensure t
   :init
@@ -87,51 +87,59 @@
   (setq nerd-icons-ivy-rich-field-width 80)
   (setq ihibit-compacting-font-caches t))
 
-					
+;项目管理相关
+(use-package projectile
+  :ensure t
+  :hook
+  (after-init . projectile-mode)
+  :bind
+  (("C-c p" . projectile-command-map)))
+
+;启动界面
+(use-package dashboard
+  :ensure t
+  :config
+  (setq dashboard-banner-logo-title "Welcome to Emacs!")
+  (setq dashboard-projects-backend 'projectile)
+  (setq dashboard-startup-banner 'official)
+  (setq dashboard-its '((recent . 5)
+			(bookmarks . 5)
+			(projects . 10)))
+  (dashboard-setup-startup-hook))
+
+
+;使用doom系列主题					
 (use-package doom-themes
   :ensure t
   :config
   (setq doom-themes-enable-bold t
 	doom-themes-enable-italic t)
-  (load-theme 'doom-one t))
+  (load-theme 'doom-one t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-neotree-config)
+  (setq doom-themes-treemacs-theme "doom-atom")
+  (doom-themes-treemacs-config)
+  (doom-themes-org-config))
+
 #+end_src
 
-** 2.2 自动补全
-#+begin_src emacs-lisp 
-(use-package company
-  :ensure t
-  :init
-  (global-company-mode)
-  :bind
-  (:map company-active-map
-	("C-n" . 'company-select-next)
-	("C-p" . 'company-select-previous))
-  :config
-  (setq company-minimum-prefix-length 1)
-  (setq company-tooltip-align-annotations t)
-  (setq company-idle-delay 0.0)
-  (setq company-show-numbers t)
-  (setq company-selection-warp-around t)
-  (setq company-transformers '(company-sort-by-occurrence)))
-
-(use-package company-box
-  :ensure t
-  :if window-system
-  :hook
-  (company-mode . company-box-mode))
-#+end_src
-
-** 2.3 minibuffer设定
+** minibuffer设定
 #+begin_src emacs-lisp
 (use-package vertico
   :ensure t
   :config
   (vertico-mode t))
 
+
 (use-package orderless
   :ensure t
   :config
   (setq completion-styles '(orderless)))
+
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode t))
 
 (use-package embark
   :ensure t
@@ -147,13 +155,6 @@
    ("C-;" . embark-dwim)
    ("C-h B" . embark-bindings)))
 
-
-
-(use-package marginalia
-  :ensure t
-  :config
-  (marginalia-mode t))
-
 (use-package consult
   :ensure t
   :config
@@ -166,33 +167,9 @@
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 
-
-** 2.4 启动界面
+* 交互逻辑
+** 一般交互行为
 #+begin_src emacs-lisp
-(use-package projectile
-  :ensure t
-  :hook
-  (after-init . projectile-mode)
-  :bind
-  (("C-c p" . projectile-command-map)))
-
-
-(use-package dashboard
-  :ensure t
-  :config
-  (setq dashboard-banner-logo-title "Welcome to Emacs!")
-  (setq dashboard-projects-backend 'projectile)
-  (setq dashboard-startup-banner 'official)
-  (setq dashboard-its '((recent . 5)
-			(bookmarks . 5)
-			(projects . 10)))
-  (dashboard-setup-startup-hook))
-#+end_src
-
-* 3. emacs行为
-** 3.1 一般行为
-#+begin_src emacs-lisp
-
 ;emacs前询问是否确认
 (setq confirm-kill-emacs #'yes-or-no-p)
 
@@ -217,10 +194,22 @@
 ;win10的C-SPC和系统输入法冲突，切换为M-SPC
 (global-unset-key (kbd "C-SPC"))
 (global-set-key (kbd "C-x SPC") 'set-mark-command)
-#+end_src
 
-** 3.2 打开历史文件，上次光标所在位置
-#+begin_src emacs-lisp
+;取消系统铃声
+(setq ring-bell-funciton 'ignore)
+
+;增强C-a和C-e快捷键
+(use-package mwim
+  :ensure t
+  :bind
+  (("C-a" . mwim-beginning-of-code-or-line)
+   ("C-e" . mwim-end-of-code-or-line)))
+
+;增加重启emacs命令
+(use-package restart-emacs
+  :ensure t)
+
+;打开历史文件
 (use-package savehist
   :ensure nil
   :hook
@@ -235,29 +224,71 @@
 					extended-command-history)
 	savehist-autosave-interval 300))
 
+;保存上次光标所在位置
 (use-package saveplace
   :ensure nil
   :hook
   (after-init . save-place-mode))
-#+end_src
 
-** 3.3 增加重启emacs命令
-#+begin_src emacs-lisp
-(use-package restart-emacs
-  :ensure t)
-#+end_src
-
-** 3.4 优化undo操作
-#+begin_src emacs-lisp
+;优化undo操作
 (use-package undo-tree
   :ensure t
   :init
-  (global-undo-tree-mode)
-  :custom
-  (undo-tree-auto-save-history nil))
+  (global-undo-tree-mode 1)
+  :config
+  (setq undo-tree-auto-save-history nil)
+  (setq evil-undo-system 'undo-tree))
+
 #+end_src
 
-** 3.5 搜索功能
+** 自动补全
+#+begin_src emacs-lisp 
+(use-package company
+  :ensure t
+  :init
+  (global-company-mode)
+  :bind
+  (:map company-active-map
+	("C-n" . company-select-next)
+	("C-p" . company-select-previous)
+	("<tab>" . company-complete-common-or-cycle)
+   :map company-search-map
+	("C-n" . company-select-next)
+	("C-p" . company-select-previous))
+  :config
+  (setq company-minimum-prefix-length 1)
+  (setq company-tooltip-align-annotations t)
+  (setq company-idle-delay 0.0)
+  (setq company-show-numbers t)
+  (setq company-selection-warp-around t)
+  (setq company-transformers '(company-sort-by-occurrence))
+  (bind-key [remap completion-at-point] #'company-complete company-mode-map))
+
+(use-package company-box
+  :ensure t
+  :if window-system
+  :hook
+  (company-mode . company-box-mode))
+
+(use-package lsp-mode
+  :ensure t
+  :hook
+  (prog-mode . lsp-deferred)
+  :custom
+  (lsp-keymap-prefix "C-c l")
+  (lsp-prefer-capf t)
+  (lsp-auto-guess-root t)
+  (lsp-keep-workspace-alive nil)
+  :bind
+  (:map lsp-mode-map
+	("C-c f" . lsp-format-region)
+	("C-c d" . lsp-describe-thing-at-point)
+	("C-c a" . lsp-execute-code-action)
+	("C-c r" . lsp-rename)))
+#+end_src
+
+** 搜索功能
+** M-x命令增强
 #+begin_src emacs-lisp
 (use-package counsel
   :ensure t
@@ -271,8 +302,80 @@
    ("C-c c g" . counsel-git)))
 #+end_src
 
-* 4. 编程环境
-** 4.1 项目管理
+** Evil模式
+#+begin_src emacs-lisp
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (evil-mode)
+  (with-eval-after-load 'evil-maps
+    (define-key evil-motion-state-map (kbd "RET") nil)))
+
+;evil-mode教程
+(use-package evil-tutor-sc
+  :ensure t)
+
+;evil社区定义快捷键
+(use-package evil-collection
+  :ensure t
+  :demand t
+  :config
+  (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list))
+  (evil-collection-init)
+  (cl-loop for (mode . state) in
+           '((org-agenda-mode . normal)
+             (Custom-mode . emacs)
+             (makey-key-mode . motion))
+           do (evil-set-initial-state mode state)))
+
+(use-package evil-surround
+  :ensure t
+  :init
+  (global-evil-surround-mode 1))
+
+(use-package evil-nerd-commenter
+  :ensure t
+  :init
+  (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+  (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines))
+
+(use-package evil-snipe
+  :ensure t
+  :diminish
+  :init
+  (evil-snipe-mode +1)
+  (evil-snipe-override-mode +1))
+
+(use-package iedit
+  :ensure t
+  :init
+  (setq iedit-toggle-key-default nil)
+  :bind
+  (:map iedit-mode-keymap
+        ("M-h" . iedit-restrict-function)
+        ("M-i" . iedit-restrict-current-line)))
+
+(use-package evil-multiedit
+  :ensure t
+  :commands
+  (evil-multiedit-default-keybinds)
+  :init
+  (evil-multiedit-default-keybinds))
+#+end_src
+
+** 窗口管理
+#+begin_src emacs-lisp
+(use-package window-numbering
+  :ensure t
+  :init
+  :hook
+  (after-init . window-numbering-mode))
+#+end_src
+
+* 编程环境
+** 项目管理
 #+begin_src emacs-lisp
 (use-package treemacs
   :ensure t
@@ -302,7 +405,7 @@
   :ensure t)
 #+end_src
 
-** 4.2 python
+** python相关
 #+begin_src emacs-lisp
 (use-package python
   :defer t
