@@ -64,7 +64,10 @@
 (use-package doom-modeline
   :ensure t
   :init
-  (doom-modeline-mode 1))
+  (doom-modeline-mode 1)
+  :custom-face
+  (mode-line ((t (:height 0.9))))
+  (mode-line-inactive ((t (:height 0.9)))))
 
 ;安装需要的图标和字体
 ;激活后安装字体可以 M-x all-the-icons-install-fonts
@@ -372,6 +375,28 @@
   :init
   :hook
   (after-init . window-numbering-mode))
+#+end_src
+
+** 日程
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "STARTED(s)" "|" "Done(d!/!)")
+              (sequence "WATTING(w@/!)" "SOMEDAY(s)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
+
+;org-agenda设置
+(global-set-key (kbd "C-c a") 'org-agenda)
+(setq org-agenda-files '("~/.emacs.d/gtd.org"))
+(setq org-agenda-span 'day)
+
+;; (setq org-capture-templates
+  ;; '(("t" "Todo" entry (file+headline "~/.emacs.d/gtd.org" "Workspace")
+     ;; "* TODO [#B] %?\n %i\n %U"
+     ;; :empty-lines 1)))
+;; (global-set-key (kbd "C-c r") 'org-capture)
+
+;; (setq org-agenda-custom-commands
+  ;; '(("c" "Important and priority things"
+    ;; ((tags-todo "+PRIORITY=\"A\"")))))
 #+end_src
 
 * 编程环境
