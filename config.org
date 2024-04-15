@@ -18,6 +18,8 @@
 (column-number-mode t)
 
 ;设置字体
+(set-language-environment "UTF-8")
+
 (set-face-attribute 'default nil :font "iosevka-14:weight=normal")
 
 (dolist (charset '(kana han cjk-misc bopomofo))
@@ -201,6 +203,9 @@
 ;取消系统铃声
 (setq ring-bell-funciton 'ignore)
 
+;设定启动时不显示警告信息
+(setq inhibit-startup-message t)
+
 ;增强C-a和C-e快捷键
 (use-package mwim
   :ensure t
@@ -240,7 +245,8 @@
   (global-undo-tree-mode 1)
   :config
   (setq undo-tree-auto-save-history nil)
-  (setq evil-undo-system 'undo-tree))
+  ;(setq evil-undo-system 'undo-tree)
+)
 
 #+end_src
 
@@ -307,65 +313,65 @@
 
 ** Evil模式
 #+begin_src emacs-lisp
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  (evil-mode)
-  (with-eval-after-load 'evil-maps
-    (define-key evil-motion-state-map (kbd "RET") nil)))
+;; (use-package evil
+;;   :ensure t
+;;   :init
+;;   (setq evil-want-keybinding nil)
+;;   (setq evil-want-C-u-scroll t)
+;;   (evil-mode)
+;;   (with-eval-after-load 'evil-maps
+;;     (define-key evil-motion-state-map (kbd "RET") nil)))
 
-;evil-mode教程
-(use-package evil-tutor-sc
-  :ensure t)
+;; ;evil-mode教程
+;; (use-package evil-tutor-sc
+;;   :ensure t)
 
-;evil社区定义快捷键
-(use-package evil-collection
-  :ensure t
-  :demand t
-  :config
-  (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list))
-  (evil-collection-init)
-  (cl-loop for (mode . state) in
-           '((org-agenda-mode . normal)
-             (Custom-mode . emacs)
-             (makey-key-mode . motion))
-           do (evil-set-initial-state mode state)))
+;; ;evil社区定义快捷键
+;; (use-package evil-collection
+;;   :ensure t
+;;   :demand t
+;;   :config
+;;   (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list))
+;;   (evil-collection-init)
+;;   (cl-loop for (mode . state) in
+;;            '((org-agenda-mode . normal)
+;;              (Custom-mode . emacs)
+;;              (makey-key-mode . motion))
+;;            do (evil-set-initial-state mode state)))
 
-(use-package evil-surround
-  :ensure t
-  :init
-  (global-evil-surround-mode 1))
+;; (use-package evil-surround
+;;   :ensure t
+;;   :init
+;;   (global-evil-surround-mode 1))
 
-(use-package evil-nerd-commenter
-  :ensure t
-  :init
-  (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
-  (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines))
+;; (use-package evil-nerd-commenter
+;;   :ensure t
+;;   :init
+;;   (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+;;   (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines))
 
-(use-package evil-snipe
-  :ensure t
-  :diminish
-  :init
-  (evil-snipe-mode +1)
-  (evil-snipe-override-mode +1))
+;; (use-package evil-snipe
+;;   :ensure t
+;;   :diminish
+;;   :init
+;;   (evil-snipe-mode +1)
+;;   (evil-snipe-override-mode +1))
 
-(use-package iedit
-  :ensure t
-  :init
-  (setq iedit-toggle-key-default nil)
-  :bind
-  (:map iedit-mode-keymap
-        ("M-h" . iedit-restrict-function)
-        ("M-i" . iedit-restrict-current-line)))
+;; (use-package iedit
+;;   :ensure t
+;;   :init
+;;   (setq iedit-toggle-key-default nil)
+;;   :bind
+;;   (:map iedit-mode-keymap
+;;         ("M-h" . iedit-restrict-function)
+;;         ("M-i" . iedit-restrict-current-line)))
 
-(use-package evil-multiedit
-  :ensure t
-  :commands
-  (evil-multiedit-default-keybinds)
-  :init
-  (evil-multiedit-default-keybinds))
+;; (use-package evil-multiedit
+;;   :ensure t
+;;   :commands
+;;   (evil-multiedit-default-keybinds)
+;;   :init
+;;   (evil-multiedit-default-keybinds))
 #+end_src
 
 ** 窗口管理
@@ -425,9 +431,10 @@
   :ensure t
   :after (treemacs lsp))
 
-;git管理工具
-(use-package magit
-  :ensure t)
+;git管理工具; windows 下非常慢
+;; (use-package magit
+;;   :ensure t)
+
 #+end_src
 
 ** python相关

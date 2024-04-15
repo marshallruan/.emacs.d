@@ -1,30 +1,44 @@
-* STARTED BGP����������
-** Done NY1-13����TDIP��ģ(BGP����)��̽��800m
-600�״�2000ŷ�׸��������ֱ治��
-DEADLINE: <2024-04-12 ���� 23:00:00> SCHEDULED: <2024-04-12 ���� 20:00:00>
-** Done ������ϣ����ݱ��ӱ����ģ�ͽ�ģ���м����K1S��ͳ�����ʸĵ�
-DEADLINE: <2024-04-13 ����> SCHEDULED: <2024-04-13 ����>
-- State "Done"       from              [2024-04-14 ���� 19:55]
-** Done δ֪����Ŀ������㱨��̽�����800~1300m
-SCHEDULED: <2024-04-13 ����>
+#+PROPERTY: FONT_ENCODING GBK
 
-- State "Done"       from "TODO"       [2024-04-14 ���� 19:54]
-* STARTED ����103��Ŀ
-** Done ��Զ�����ݴ���(����̨ȷ���Ƿ����ҵ�ʣ�µ�Զ��)
-- State "Done"       from "TODO"       [2024-04-14 ���� 19:54]
-** TODO EDI���������������λ�������㣨д���룩
-** TODO �޸Ļ����Ҫ����Ҫ��Է�д��ͬ����Э�麯
-
-* STARTED ���϶����ɿ�ϵͳ̽��3����Ŀ
-** WATTING ̫����������Զ��̨����MT
-*** TODO �������ﹲ��Э��
-DEADLINE: <2024-04-13 ����>
-- State "WATTING"    from "TODO"       [2024-04-12 ���� 17:42] \\
-  �ȴ�ȷ���ճ̣���������4��28��ȥ
-*** TODO ά�޷Ѳ���ϵͳԤ���������ϵ���ܿ�Ʊ������
-DEADLINE: <2024-04-16 �ܶ�>
-*** TODO ����缫�����¡�̫���ܼ��ӡ��������缫����ƿ��
-SCHEDULED: <2024-04-15 ��һ>
-
-
-
+* STARTED BGP油气伴生矿
+** Done NY1-13工区TDIP建模(BGP在研)，探深800m
+600米处2000欧米高阻层纵向分辨不佳
+DEADLINE: <2024-04-12 周五 23:00:00> SCHEDULED: <2024-04-12 周五 20:00:00>
+** Done 试验完毕，根据鲍居彪的新模型建模，中间高阻K1S下统电阻率改低
+DEADLINE: <2024-04-13 周六> SCHEDULED: <2024-04-13 周六>
+- State "Done"       from              [2024-04-14 周日 19:55]
+** Done 未知名项目，最近汇报，探测深度800~1300m
+SCHEDULED: <2024-04-13 周六>
+- State "Done"       from "TODO"       [2024-04-14 周日 19:54]
+** WATTING BGP选地进行试验观测
+- State "WATTING"    from              [2024-04-14 周日 22:16] \\
+  联系鲍居彪，确定试验方案，仪器已经和锡进约定
+* STARTED 贵州103项目
+** Done 带远参数据处理(找孙台确认是否能找到剩下的远参)
+- State "Done"       from "TODO"       [2024-04-14 周日 19:54]
+** TODO EDI导出，初步完成相位张量计算（写代码）
+** Done 修改会议纪要，并要求对方写合同补充协议函
+- State "Done"       from "TODO"       [2024-04-14 周日 22:13]
+** TODO 申请函找龚雪婧和汤贺军签字，然后提交给龚处，提请签补充协议
+SCHEDULED: <2024-04-17 周三>
+* STARTED 华南东部成矿系统探测3级项目
+** WATTING 太仆寺旗永久远参台建设MT
+- State "WATTING"    from "TODO"       [2024-04-12 周五 17:42] \\
+  等待确定日程，初步决定4月28日去
+*** TODO 江汉油田共建协议
+SCHEDULED: <2024-04-15 周一>
+*** Done 维修费财务系统预算调整，联系吴总开票，报销
+DEADLINE:
+- State "Done"       from "TODO"       [2024-04-15 周一 19:35]
+<2024-04-16 周二>
+*** Done 购买电缆、不极化电极、电瓶等
+SCHEDULED: <2024-04-15 周一>
+- State "Done"       from              [2024-04-15 周一 19:28]
+** STARTED 长周期MT东华理工技术委托
+*** TODO 参加周四的技术委托会
+SCHEDULED: <2024-04-18 周四>
+*** TODO 订购太阳能铁架子，和薛荣晖要发货地址
+SCHEDULED: <2024-04-20 周六>
+* STARTED 核3所西藏项目
+** TODO 到核3所去对3台仪器进行白噪测试（先找IGCEA借白噪盒）
+SCHEDULED: <2024-04-16 周二>
