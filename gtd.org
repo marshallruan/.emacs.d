@@ -35,10 +35,13 @@ DEADLINE:
 SCHEDULED: <2024-04-15 周一>
 - State "Done"       from              [2024-04-15 周一 19:28]
 ** STARTED 长周期MT东华理工技术委托
-*** TODO 参加周四的技术委托会
+*** CANCELLED 参加周四的技术委托会
 SCHEDULED: <2024-04-18 周四>
+- State "CANCELLED"  from "TODO"       [2024-04-16 Tue 22:50] \\
+  it is not been clearly demanded by Yan Xijin & Zhang Xijin
 *** TODO 订购太阳能铁架子，和薛荣晖要发货地址
 SCHEDULED: <2024-04-20 周六>
 * STARTED 核3所西藏项目
-** TODO 到核3所去对3台仪器进行白噪测试（先找IGCEA借白噪盒）
+** Done 到核3所去对3台仪器进行白噪测试（先找IGCEA借白噪盒）
 SCHEDULED: <2024-04-16 周二>
+- State "Done"       from "TODO"       [2024-04-16 Tue 22:49]
