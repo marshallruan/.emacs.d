@@ -95,10 +95,18 @@
 ;项目管理相关
 (use-package projectile
   :ensure t
-  :hook
-  (after-init . projectile-mode)
   :bind
-  (("C-c p" . projectile-command-map)))
+  (("C-c p" . projectile-command-map))
+  :config
+  (setq projectile-mode-line "Projectile")
+  (setq projectile-track-known-projects-automatically nil))
+
+(use-package counsel-projectile
+  :ensure t
+  :after (projectile)
+  :init (counsel-projectile))
+
+
 
 ;启动界面
 (use-package dashboard
@@ -108,8 +116,8 @@
   (setq dashboard-projects-backend 'projectile)
   (setq dashboard-startup-banner 'official)
   (setq dashboard-its '((recent . 5)
-			(bookmarks . 5)
-			(projects . 10)))
+			(projects . 5)
+			(agenda . 5)))
   (dashboard-setup-startup-hook))
 
 
@@ -401,6 +409,8 @@
 * 编程环境
 ** 项目管理
 #+begin_src emacs-lisp
+
+
 (use-package treemacs
   :ensure t
   :defer t
@@ -413,7 +423,7 @@
 	("C-x t t" . treemacs)
 	("C-x t B" . treemacs-bookmark)
 	("C-x t M-t" . treemacs-find-tag))
-  (:map treemacs-mode-map
+    (:map treemacs-mode-map
 	("/" . treemacs-advanced-helpful-hydra)))
 
 (use-package treemacs-projectile
