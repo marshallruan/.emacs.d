@@ -28,8 +28,9 @@ SCHEDULED: <2024-04-17 周三>
 ** WATTING 太仆寺旗永久远参台建设MT
 - State "WATTING"    from "TODO"       [2024-04-12 周五 17:42] \\
   等待确定日程，初步决定4月28日去
-*** TODO 江汉油田共建协议
+*** Done 江汉油田共建协议
 SCHEDULED: <2024-04-15 周一>
+- State "Done"       from "TODO"       [2024-04-19 Fri 14:15]
 *** Done 维修费财务系统预算调整，联系吴总开票，报销
 DEADLINE:
 - State "Done"       from "TODO"       [2024-04-15 周一 19:35]
@@ -37,15 +38,19 @@ DEADLINE:
 *** Done 购买电缆、不极化电极、电瓶等
 SCHEDULED: <2024-04-15 周一>
 - State "Done"       from              [2024-04-15 周一 19:28]
+*** Done 订购太阳能铁架子，和薛荣晖要发货地址
+SCHEDULED: <2024-04-20 周六>
+- State "Done"       from "TODO"       [2024-04-18 Thu 15:26]
 ** STARTED 长周期MT东华理工技术委托
 *** CANCELLED 参加周四的技术委托会
 SCHEDULED: <2024-04-18 周四>
 - State "CANCELLED"  from "TODO"       [2024-04-16 Tue 22:50] \\
   it is not been clearly demanded by Yan Xijin & Zhang Xijin
-*** Done 订购太阳能铁架子，和薛荣晖要发货地址
-SCHEDULED: <2024-04-20 周六>
-- State "Done"       from "TODO"       [2024-04-18 Thu 15:26]
 * STARTED 核3所西藏项目
 ** Done 到核3所去对3台仪器进行白噪测试（先找IGCEA借白噪盒）
 SCHEDULED: <2024-04-16 周二>
 - State "Done"       from "TODO"       [2024-04-16 Tue 22:49]
+
+* STARTED 国自然面上-华南稳健聚焦反演
+** TODO 江汉的复测点用MTDP重新处理
+SCHEDULED: <2024-04-24 Wed>
