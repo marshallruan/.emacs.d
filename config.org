@@ -452,6 +452,47 @@
 
 #+end_src
 
+** pure org-mode blog
+#+begin_src emacs-lisp
+;; the httpd server
+(use-package simple-httpd
+  :ensure t)
+
+;; load the publish system
+(use-package ox-publish
+  :after ox
+  :config
+  ;; Customize the HTML output
+  (setq org-publish-project-alist
+	`(("org-post"
+	       :recursive t
+	       :base-directory "~/blog/org"
+	       :base-extension "org"
+	       :publishing-directory "~/blog/public/"
+	       :publishing-funciton org-html-publish-to-html
+	       :head-line-levels 4
+	       :html-html5-fancy t
+	       :auto-preamble t
+	       :style "<link rel='stylesheet' type='text/css' href='css/style.css' />"
+	       :style-include-default nil)
+	 
+	 ("org-static"
+	       :base-directory "~/blog/org/"
+	       :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+	       :publishing-directory "~/blog/public/"
+	       :recursive t
+	       :publishing-function org-publish-attachment)
+	 ("Marshall's Tip"
+	       :components ("org-post" "org-static")))
+	))
+
+
+
+;; ; Generate the site output
+;; (org-publish-all t)
+
+;; (message "ox-pulish build complete!")
+#+end_src
 ** python相关
 #+begin_src emacs-lisp
 (use-package python
