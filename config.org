@@ -418,41 +418,8 @@
     ;; ((tags-todo "+PRIORITY=\"A\"")))))
 #+end_src
 
-* 编程环境
-** 项目管理
-#+begin_src emacs-lisp
-
-
-(use-package treemacs
-  :ensure t
-  :defer t
-  :config
-  (treemacs-tag-follow-mode)
-  :bind
-  (:map global-map
-	("M-0" . treemacs-select-window)
-	("C-x t 1" . treemacs-delete-other-windows)
-	("C-x t t" . treemacs)
-	("C-x t B" . treemacs-bookmark)
-	("C-x t M-t" . treemacs-find-tag))
-    (:map treemacs-mode-map
-	("/" . treemacs-advanced-helpful-hydra)))
-
-(use-package treemacs-projectile
-  :ensure t
-  :after (treemacs projectile))
-
-(use-package lsp-treemacs
-  :ensure t
-  :after (treemacs lsp))
-
-;git管理工具; windows 下非常慢
-;; (use-package magit
-;;   :ensure t)
-
-#+end_src
-
-** pure org-mode blog
+* Org-Mode增强
+** 纯org的博客设置
 #+begin_src emacs-lisp
 ;; the httpd server
 (use-package simple-httpd
@@ -493,6 +460,76 @@
 
 ;; (message "ox-pulish build complete!")
 #+end_src
+
+** Latex和PDF
+#+begin_src emacs-lisp
+
+;机器上需安装texlive且latex命令加入了环境变量
+(require 'ox-latex)
+(setq org-latex-compiler "xelatex")
+(setq org-image-actrual-width nil)
+(setq org-latex-pdf-process
+      '("latexmk -f -pdf -xelatex -interaction=nonstopmode -output-directory=%o %f"))
+(add-to-list 'org-latex-classes
+	     '("ctexart"
+	       "\\documentclass[UTF8,a4paper]{ctexart}
+            \\usepackage[a4paper, left=25mm, right=20mm, top=20mm, bottom=25mm]{geometry}
+            \\usepackage{fancyhdr}
+            \\fancypagestyle{plain} {
+               \\fancyhf{}
+               \\fancyfoot[C]{\\thepage}
+               \\renewcommand{\\headrule}{\\hrule height 2pt \\vspace{1mm} \\hrule height 1pt}
+               \\renewcommand{\\footrulewidth}{1pt}
+               \\fancyfoot[L]{}
+               \\fancyfoot[R]{}
+               \\fancyhead[R]{\\leftmark}
+            }
+            \\pagestyle{plain}"
+           ("\\section{%s}" . "\\section*{%s}")
+	       ("\\subsection{%s}" . "\\subsection*{%s}")
+	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
+	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+(setq org-latex-default-class "ctexart")
+
+
+
+#+end_src
+
+* 编程环境
+** 项目管理
+#+begin_src emacs-lisp
+
+
+(use-package treemacs
+  :ensure t
+  :defer t
+  :config
+  (treemacs-tag-follow-mode)
+  :bind
+  (:map global-map
+	("M-0" . treemacs-select-window)
+	("C-x t 1" . treemacs-delete-other-windows)
+	("C-x t t" . treemacs)
+	("C-x t B" . treemacs-bookmark)
+	("C-x t M-t" . treemacs-find-tag))
+    (:map treemacs-mode-map
+	("/" . treemacs-advanced-helpful-hydra)))
+
+(use-package treemacs-projectile
+  :ensure t
+  :after (treemacs projectile))
+
+(use-package lsp-treemacs
+  :ensure t
+  :after (treemacs lsp))
+
+;git管理工具; windows 下非常慢
+;; (use-package magit
+;;   :ensure t)
+
+#+end_src
+
 ** python相关
 #+begin_src emacs-lisp
 (use-package python
