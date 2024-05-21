@@ -123,18 +123,24 @@
   (dashboard-setup-startup-hook))
 
 
-;使用doom系列主题					
-(use-package doom-themes
+;使用doom系列主题
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   (setq doom-themes-enable-bold t
+;; 	doom-themes-enable-italic t)
+;;   (load-theme 'doom-one t)
+;;   (doom-themes-visual-bell-config)
+;;   (doom-themes-neotree-config)
+;;   (setq doom-themes-treemacs-theme "doom-solarized-light")
+;;   (doom-themes-treemacs-config)
+;;  (doom-themes-org-config))
+
+;使用solarized主题
+(use-package solarized-theme
   :ensure t
   :config
-  (setq doom-themes-enable-bold t
-	doom-themes-enable-italic t)
-  (load-theme 'doom-one t)
-  (doom-themes-visual-bell-config)
-  (doom-themes-neotree-config)
-  (setq doom-themes-treemacs-theme "doom-atom")
-  (doom-themes-treemacs-config)
-  (doom-themes-org-config))
+  (load-theme 'solarized-light t))
 
 #+end_src
 
@@ -191,6 +197,9 @@
 
 ;org-mode文字缩进
 (setq org-startup-indented t)
+
+;org-mode模式下全行显示
+(setq org-startup-truncated nil)
 #+end_src
 * 交互逻辑
 ** 一般交互行为
