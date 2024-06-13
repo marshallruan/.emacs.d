@@ -124,23 +124,23 @@
 
 
 ;使用doom系列主题
-;; (use-package doom-themes
-;;   :ensure t
-;;   :config
-;;   (setq doom-themes-enable-bold t
-;; 	doom-themes-enable-italic t)
-;;   (load-theme 'doom-one t)
-;;   (doom-themes-visual-bell-config)
-;;   (doom-themes-neotree-config)
-;;   (setq doom-themes-treemacs-theme "doom-solarized-light")
-;;   (doom-themes-treemacs-config)
-;;  (doom-themes-org-config))
-
-;使用solarized主题
-(use-package solarized-theme
+(use-package doom-themes
   :ensure t
   :config
-  (load-theme 'solarized-light t))
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
+  (load-theme 'doom-solarized-light t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-neotree-config)
+  (setq doom-themes-treemacs-theme "doom-solarized-light")
+  (doom-themes-treemacs-config)
+ (doom-themes-org-config))
+
+;使用solarized主题
+;; (use-package solarized-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'solarized-light t))
 
 #+end_src
 
