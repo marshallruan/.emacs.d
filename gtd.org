@@ -78,6 +78,7 @@ SCHEDULED: <2024-06-03 Mon>
 SCHEDULED: <2024-04-18 周四>
 - State "CANCELLED"  from "TODO"       [2024-04-16 Tue 22:50] \\
   it is not been clearly demanded by Yan Xijin & Zhang Xijin
+** TODO 已有宽频MT测点用MTDP软件重新编辑，监督王栩评级
 * STARTED 核3所西藏项目
 ** Done 到核3所去对3台仪器进行白噪测试（先找IGCEA借白噪盒）
 SCHEDULED: <2024-04-16 周二>

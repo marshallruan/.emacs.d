@@ -4,7 +4,25 @@
 (use-package package
   :config
   (add-to-list 'package-archives '("melepa" . "https://melpa.org/packages/")))
+
+;安装staight.el包管理器
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+	   "straight/repos/straight.el/bootstrap.el"
+	   (or (bound-and-true-p straight-bae-dir)
+	       user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+	(url-retrieve-synchronously
+	 "https://raw.githubusercontent.com/radian-software/straight.el/devlop/install.el" 'silent 'ihibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
 #+end_src
+
 * UI显示 
 ** 基本UI显示
 #+begin_src emacs-lisp
@@ -281,41 +299,61 @@
 #+end_src
 
 ** 自动补全
-#+begin_src emacs-lisp 
-(use-package company
-  :ensure t
+#+begin_src emacs-lisp
+;;使用lsp-bridge代替company
+;;需要安装pip install epc orjson sexpdata six setuptools paramiko rapidfuzz
+;;需要安装markdown-moe和yasnippet的emacs模块
+(use-package markdown-mode
+  :ensure t)
+(use-package yasnippet
+  :ensure t)
+(use-package lsp-bridge
+  :straight
+  '(lsp-bridge
+    :type git
+    :host github
+    :repo "manateelazycat/lsp-bridge"
+    :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+	:build (:not compile))
   :init
-  (global-company-mode)
-  :config
-  (setq company-minimum-prefix-length 1)
-  (setq company-tooltip-align-annotations t)
-  (setq company-idle-delay 0.0)
-  (setq company-show-numbers t)
-  (setq company-selection-warp-around t)
-  (setq company-transformers '(company-sort-by-occurrence)))
+  (global-lsp-bridge-mode))
+
+
+
+;; (use-package company
+;;   :ensure t
+;;   :init
+;;   (global-company-mode)
+;;   :config
+;;   (setq company-minimum-prefix-length 1)
+;;   (setq company-tooltip-align-annotations t)
+;;   (setq company-idle-delay 0.0)
+;;   (setq company-show-numbers t)
+;;   (setq company-selection-warp-around t)
+;;   (setq company-transformers '(company-sort-by-occurrence)))
   
 
-(use-package company-box
-  :ensure t
-  :if window-system
-  :hook
-  (company-mode . company-box-mode))
+;; (use-package company-box
+;;   :ensure t
+;;   :if window-system
+;;   :hook
+;;   (company-mode . company-box-mode))
 
-(use-package lsp-mode
-  :ensure t
-  :hook
-  (prog-mode . lsp-deferred)
-  :custom
-  (lsp-keymap-prefix "C-c l")
-  (lsp-prefer-capf t)
-  (lsp-auto-guess-root t)
-  (lsp-keep-workspace-alive nil)
-  :bind
-  (:map lsp-mode-map
-	("C-c f" . lsp-format-region)
-	("C-c d" . lsp-describe-thing-at-point)
-	("C-c a" . lsp-execute-code-action)
-	("C-c r" . lsp-rename)))
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :hook
+;;   (prog-mode . lsp-deferred)
+;;   :custom
+;;   (lsp-keymap-prefix "C-c l")
+;;   (lsp-prefer-capf t)
+;;   (lsp-auto-guess-root t)
+;;   (lsp-keep-workspace-alive nil)
+;;   :bind
+;;   (:map lsp-mode-map
+;; 	("C-c f" . lsp-format-region)
+;; 	("C-c d" . lsp-describe-thing-at-point)
+;; 	("C-c a" . lsp-execute-code-action)
+;; 	("C-c r" . lsp-rename)))
 #+end_src
 
 ** 搜索功能
