@@ -70,6 +70,8 @@ SCHEDULED: <2024-06-03 Mon>
 - [X] 正式职工津贴，我+熊交给孟宪辉（走线下）， 王文杰劳务交给财务。附野外工作日程表+签字。
 - [X] 野外包干说明
 - [X] 去百万庄报销，报销单修正：王浩阳名字错误，熊小松闭合，发票地名解释，科技处，人事处，采购办补签
+*** Done 远参考台维护，安装4G模块，温控风扇，贴隔热棉
+  - State "Done"       from "TODO"       [2024-07-08 Mon 11:33]  
   
 
 ** Done 长周期MT东华理工技术委托
@@ -78,7 +80,9 @@ SCHEDULED: <2024-06-03 Mon>
 SCHEDULED: <2024-04-18 周四>
 - State "CANCELLED"  from "TODO"       [2024-04-16 Tue 22:50] \\
   it is not been clearly demanded by Yan Xijin & Zhang Xijin
-** TODO 已有宽频MT测点用MTDP软件重新编辑，监督王栩评级
+  
+** Done 已有宽频MT测点用MTDP软件重新编辑，监督王栩评级
+- State "Done"       from "TODO"       [2024-07-15 Mon 11:33]
 * STARTED 核3所西藏项目
 ** Done 到核3所去对3台仪器进行白噪测试（先找IGCEA借白噪盒）
 SCHEDULED: <2024-04-16 周二>
