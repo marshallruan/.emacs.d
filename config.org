@@ -24,7 +24,7 @@
 #+end_src
 
 * UI显示 
-** 基本UI显示
+
 #+begin_src emacs-lisp
 (tool-bar-mode -1)
 
@@ -77,10 +77,8 @@
   (progn
     (setq column-number-mode t)))
 
-#+end_src
 
-** emacs主题
-#+begin_src emacs-lisp
+;mini-buffer上方标题栏的主题
 (use-package doom-modeline
   :ensure t
   :init
@@ -90,13 +88,11 @@
   (mode-line-inactive ((t (:height 0.9)))))
 
 ;安装需要的图标和字体
-;激活后安装字体可以 M-x all-the-icons-install-fonts
-;然后在操作系统中把下载的字体安装到系统字体
+;激活后用M-x all-the-icons-install-fonts下载字体
+;然后在操作系统中把下载好的字体加入系统字体
 (use-package all-the-icons
   :ensure t)
 
-;同上 M-x nerd-icons-install-fonts
-;然后在操作系统中把下载的字体安装到系统字体
 (use-package nerd-icons-ivy-rich
   :ensure t
   :init
@@ -108,61 +104,33 @@
   (setq nerd-icons-ivy-rich-icon-size 1.0)
   (setq nerd-icons-ivy-rich-project t)
   (setq nerd-icons-ivy-rich-field-width 80)
-  (setq ihibit-compacting-font-caches t))
+   (setq ihibit-compacting-font-caches t))
 
-;项目管理相关
-(use-package projectile
+
+;使用doom系统主题
+(use-package doom-themes
   :ensure t
-  :bind
-  (("C-c p" . projectile-command-map))
   :config
-  (setq projectile-mode-line "Projectile")
-  (setq projectile-track-known-projects-automatically nil))
-
-(use-package counsel-projectile
-  :ensure t
-  :after (projectile)
-  :init (counsel-projectile))
-
-
+  (setq doom-themes-enable-bold t
+	  doom-themes-enable-italic t)
+  (load-theme 'doom-solarized-dark t)
+  (doom-themes-visual-bell-config)
+ (doom-themes-org-config))
 
 ;启动界面
 (use-package dashboard
   :ensure t
   :config
   (setq dashboard-banner-logo-title "Welcome to Emacs!")
-  (setq dashboard-projects-backend 'projectile)
-  (setq dashboard-display-icons-p t)	
+  (setq dashboard-display-icons-p t)
   (setq dashboard-icon-type 'nerd-icons)
   (setq dashboard-startup-banner 'official)
-  ;; (setq dashboard-items '((recents . 5)
-  ;; 			  (bookmarks . 5)
-  ;; 			  (projects . 5))) 
   (dashboard-setup-startup-hook))
-
-
-;使用doom系列主题
-(use-package doom-themes
-  :ensure t
-  :config
-  (setq doom-themes-enable-bold t
-	doom-themes-enable-italic t)
-  (load-theme 'doom-solarized-light t)
-  (doom-themes-visual-bell-config)
-  (doom-themes-neotree-config)
-  (setq doom-themes-treemacs-theme "doom-solarized-light")
-  (doom-themes-treemacs-config)
- (doom-themes-org-config))
-
-;使用solarized主题
-;; (use-package solarized-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'solarized-light t))
 
 #+end_src
 
-** minibuffer 
+* minibuffer设置
+
 #+begin_src emacs-lisp
 (use-package vertico
   :ensure t
@@ -206,8 +174,10 @@
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 
-** org-mode显示
+* org-mode相关
 #+begin_src emacs-lisp
+
+;org-mode标题栏显示
 (use-package org-bullets
   :ensure t
   :config
@@ -218,10 +188,43 @@
 
 ;org-mode模式下全行显示
 (setq org-startup-truncated nil)
+
+;Latex和PDF
+;机器上需安装texlive且latex命令加入了环境变量
+(require 'ox-latex)
+(setq org-latex-compiler "xelatex")
+(setq org-image-actrual-width nil)
+(setq org-latex-pdf-process
+      '("latexmk -f -pdf -xelatex -interaction=nonstopmode -output-directory=%o %f"))
+(add-to-list 'org-latex-classes
+	     '("ctexart"
+	       "\\documentclass[UTF8,a4paper]{ctexart}
+            \\usepackage[a4paper, left=25mm, right=20mm, top=20mm, bottom=25mm]{geometry}
+            \\usepackage{fancyhdr}
+            \\fancypagestyle{plain} {
+               \\fancyhf{}
+               \\fancyfoot[C]{\\thepage}
+               \\renewcommand{\\headrule}{\\hrule height 2pt \\vspace{1mm} \\hrule height 1pt}
+               \\renewcommand{\\footrulewidth}{1pt}
+               \\fancyfoot[L]{}
+               \\fancyfoot[R]{}
+               \\fancyhead[R]{\\leftmark}
+            }
+            \\pagestyle{plain}"
+           ("\\section{%s}" . "\\section*{%s}")
+	       ("\\subsection{%s}" . "\\subsection*{%s}")
+	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
+	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+(setq org-latex-default-class "ctexart")
+
+
 #+end_src
+
 * 交互逻辑
-** 一般交互行为
+
 #+begin_src emacs-lisp
+
 ;emacs前询问是否确认
 (setq confirm-kill-emacs #'yes-or-no-p)
 
@@ -244,7 +247,7 @@
 ;编程模式下，可折叠代码块
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
-;win10的C-SPC和系统输入法冲突，切换为M-SPC
+;win10的C-SPC和系统输入法冲突，切换为C-x SPC
 (global-unset-key (kbd "C-SPC"))
 (global-set-key (kbd "C-x SPC") 'set-mark-command)
 
@@ -296,13 +299,38 @@
   ;(setq evil-undo-system 'undo-tree)
 )
 
+;窗口管理，使用M-数字切换窗口
+(use-package window-numbering
+  :ensure t
+  :init
+  :hook
+  (after-init . window-numbering-mode))
+
+
 #+end_src
 
-** 自动补全
+* 日程
 #+begin_src emacs-lisp
-;;使用lsp-bridge代替company
-;;需要安装pip install epc orjson sexpdata six setuptools paramiko rapidfuzz
-;;需要安装markdown-moe和yasnippet的emacs模块
+
+;日程管理常用快捷键
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "STARTED(s)" "|" "Done(d!/!)")
+              (sequence "WATTING(w@/!)" "SOMEDAY(s)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
+
+;org-agenda设置
+(global-set-key (kbd "C-c a") 'org-agenda)
+(setq org-agenda-files '("~/.emacs.d/gtd.org"))
+(setq org-agenda-span 'day)
+
+#+end_src
+
+* 编程相关
+
+#+begin_src emacs-lisp
+
+;使用lsp-bridge代替company
+;需要安装python相应模块，需要Node，pyright
+;需要安装markdown-moe和yasnippet的emacs模块
 (use-package markdown-mode
   :ensure t)
 (use-package yasnippet
@@ -319,273 +347,4 @@
   (global-lsp-bridge-mode))
 
 
-
-;; (use-package company
-;;   :ensure t
-;;   :init
-;;   (global-company-mode)
-;;   :config
-;;   (setq company-minimum-prefix-length 1)
-;;   (setq company-tooltip-align-annotations t)
-;;   (setq company-idle-delay 0.0)
-;;   (setq company-show-numbers t)
-;;   (setq company-selection-warp-around t)
-;;   (setq company-transformers '(company-sort-by-occurrence)))
-  
-
-;; (use-package company-box
-;;   :ensure t
-;;   :if window-system
-;;   :hook
-;;   (company-mode . company-box-mode))
-
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :hook
-;;   (prog-mode . lsp-deferred)
-;;   :custom
-;;   (lsp-keymap-prefix "C-c l")
-;;   (lsp-prefer-capf t)
-;;   (lsp-auto-guess-root t)
-;;   (lsp-keep-workspace-alive nil)
-;;   :bind
-;;   (:map lsp-mode-map
-;; 	("C-c f" . lsp-format-region)
-;; 	("C-c d" . lsp-describe-thing-at-point)
-;; 	("C-c a" . lsp-execute-code-action)
-;; 	("C-c r" . lsp-rename)))
 #+end_src
-
-** 搜索功能
-** M-x命令增强
-#+begin_src emacs-lisp
-(use-package counsel
-  :ensure t
-  :bind
-  (("M-x" . counsel-M-x)
-   ("C-x C-f" . counsel-find-file)
-   ("C-c c t" . counsel-load-theme)
-   ("C-c c b" . counsel-bookmark)
-   ("C-c c r" . counsel-rg)
-   ("C-c c f" . counsel-fzf)
-   ("C-c c g" . counsel-git)))
-#+end_src
-
-** Evil模式
-#+begin_src emacs-lisp
-;; (use-package evil
-;;   :ensure t
-;;   :init
-;;   (setq evil-want-keybinding nil)
-;;   (setq evil-want-C-u-scroll t)
-;;   (evil-mode)
-;;   (with-eval-after-load 'evil-maps
-;;     (define-key evil-motion-state-map (kbd "RET") nil)))
-
-;; ;evil-mode教程
-;; (use-package evil-tutor-sc
-;;   :ensure t)
-
-;; ;evil社区定义快捷键
-;; (use-package evil-collection
-;;   :ensure t
-;;   :demand t
-;;   :config
-;;   (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list))
-;;   (evil-collection-init)
-;;   (cl-loop for (mode . state) in
-;;            '((org-agenda-mode . normal)
-;;              (Custom-mode . emacs)
-;;              (makey-key-mode . motion))
-;;            do (evil-set-initial-state mode state)))
-
-;; (use-package evil-surround
-;;   :ensure t
-;;   :init
-;;   (global-evil-surround-mode 1))
-
-;; (use-package evil-nerd-commenter
-;;   :ensure t
-;;   :init
-;;   (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
-;;   (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines))
-
-;; (use-package evil-snipe
-;;   :ensure t
-;;   :diminish
-;;   :init
-;;   (evil-snipe-mode +1)
-;;   (evil-snipe-override-mode +1))
-
-;; (use-package iedit
-;;   :ensure t
-;;   :init
-;;   (setq iedit-toggle-key-default nil)
-;;   :bind
-;;   (:map iedit-mode-keymap
-;;         ("M-h" . iedit-restrict-function)
-;;         ("M-i" . iedit-restrict-current-line)))
-
-;; (use-package evil-multiedit
-;;   :ensure t
-;;   :commands
-;;   (evil-multiedit-default-keybinds)
-;;   :init
-;;   (evil-multiedit-default-keybinds))
-#+end_src
-
-** 窗口管理
-#+begin_src emacs-lisp
-(use-package window-numbering
-  :ensure t
-  :init
-  :hook
-  (after-init . window-numbering-mode))
-#+end_src
-
-** 日程
-#+begin_src emacs-lisp
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "STARTED(s)" "|" "Done(d!/!)")
-              (sequence "WATTING(w@/!)" "SOMEDAY(s)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
-
-;org-agenda设置
-(global-set-key (kbd "C-c a") 'org-agenda)
-(setq org-agenda-files '("~/.emacs.d/gtd.org"))
-(setq org-agenda-span 'day)
-
-;; (setq org-capture-templates
-  ;; '(("t" "Todo" entry (file+headline "~/.emacs.d/gtd.org" "Workspace")
-     ;; "* TODO [#B] %?\n %i\n %U"
-     ;; :empty-lines 1)))
-;; (global-set-key (kbd "C-c r") 'org-capture)
-
-;; (setq org-agenda-custom-commands
-  ;; '(("c" "Important and priority things"
-    ;; ((tags-todo "+PRIORITY=\"A\"")))))
-#+end_src
-
-* Org-Mode增强
-** 纯org的博客设置
-#+begin_src emacs-lisp
-;; the httpd server
-(use-package simple-httpd
-  :ensure t)
-
-;; load the publish system
-(use-package ox-publish
-  :after ox
-  :config
-  ;; Customize the HTML output
-  (setq org-publish-project-alist
-	`(("org-post"
-	       :recursive t
-	       :base-directory "~/blog/org"
-	       :base-extension "org"
-	       :publishing-directory "~/blog/public/"
-	       :publishing-funciton org-html-publish-to-html
-	       :head-line-levels 4
-	       :html-html5-fancy t
-	       :auto-preamble t
-	       :style "<link rel='stylesheet' type='text/css' href='css/style.css' />"
-	       :style-include-default nil)
-	 
-	 ("org-static"
-	       :base-directory "~/blog/org/"
-	       :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-	       :publishing-directory "~/blog/public/"
-	       :recursive t
-	       :publishing-function org-publish-attachment)
-	 ("Marshall's Tip"
-	       :components ("org-post" "org-static")))
-	))
-
-
-
-;; ; Generate the site output
-;; (org-publish-all t)
-
-;; (message "ox-pulish build complete!")
-#+end_src
-
-** Latex和PDF
-#+begin_src emacs-lisp
-
-;机器上需安装texlive且latex命令加入了环境变量
-(require 'ox-latex)
-(setq org-latex-compiler "xelatex")
-(setq org-image-actrual-width nil)
-(setq org-latex-pdf-process
-      '("latexmk -f -pdf -xelatex -interaction=nonstopmode -output-directory=%o %f"))
-(add-to-list 'org-latex-classes
-	     '("ctexart"
-	       "\\documentclass[UTF8,a4paper]{ctexart}
-            \\usepackage[a4paper, left=25mm, right=20mm, top=20mm, bottom=25mm]{geometry}
-            \\usepackage{fancyhdr}
-            \\fancypagestyle{plain} {
-               \\fancyhf{}
-               \\fancyfoot[C]{\\thepage}
-               \\renewcommand{\\headrule}{\\hrule height 2pt \\vspace{1mm} \\hrule height 1pt}
-               \\renewcommand{\\footrulewidth}{1pt}
-               \\fancyfoot[L]{}
-               \\fancyfoot[R]{}
-               \\fancyhead[R]{\\leftmark}
-            }
-            \\pagestyle{plain}"
-           ("\\section{%s}" . "\\section*{%s}")
-	       ("\\subsection{%s}" . "\\subsection*{%s}")
-	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
-	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-(setq org-latex-default-class "ctexart")
-
-
-
-#+end_src
-
-* 编程环境
-** 项目管理
-#+begin_src emacs-lisp
-
-
-(use-package treemacs
-  :ensure t
-  :defer t
-  :config
-  (treemacs-tag-follow-mode)
-  :bind
-  (:map global-map
-	("M-0" . treemacs-select-window)
-	("C-x t 1" . treemacs-delete-other-windows)
-	("C-x t t" . treemacs)
-	("C-x t B" . treemacs-bookmark)
-	("C-x t M-t" . treemacs-find-tag))
-    (:map treemacs-mode-map
-	("/" . treemacs-advanced-helpful-hydra)))
-
-(use-package treemacs-projectile
-  :ensure t
-  :after (treemacs projectile))
-
-(use-package lsp-treemacs
-  :ensure t
-  :after (treemacs lsp))
-
-;git管理工具; windows 下非常慢
-;; (use-package magit
-;;   :ensure t)
-
-#+end_src
-
-** python相关
-#+begin_src emacs-lisp
-(use-package python
-  :defer t
-  :mode
-  ("\\.py\\'" . python-mode)
-  :interpreter
-  ("python3" . python-mode))
-#+end_src
-
-
-

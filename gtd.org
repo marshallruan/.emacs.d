@@ -1,6 +1,7 @@
 #+PROPERTY: FONT_ENCODING GBK
 
-* STARTED BGP油气伴生矿
+* Done BGP油气伴生矿
+- State "Done"       from "STARTED"    [2024-12-09 Mon 10:38]
 ** Done NY1-13工区TDIP建模(BGP在研)，探深800m
 600米处2000欧米高阻层纵向分辨不佳
 DEADLINE: <2024-04-12 周五 23:00:00> SCHEDULED: <2024-04-12 周五 20:00:00>
@@ -83,17 +84,21 @@ SCHEDULED: <2024-04-18 周四>
   
 ** Done 已有宽频MT测点用MTDP软件重新编辑，监督王栩评级
 - State "Done"       from "TODO"       [2024-07-15 Mon 11:33]
-* STARTED 核3所西藏项目
+
+  
+* Done 核3所西藏项目
+- State "Done"       from "STARTED"    [2024-11-16 Sat 20:59]
 ** Done 到核3所去对3台仪器进行白噪测试（先找IGCEA借白噪盒）
 SCHEDULED: <2024-04-16 周二>
 - State "Done"       from "TODO"       [2024-04-16 Tue 22:49]
 ** Done 现场MT一致性测试数据处理，王闻文主持，对比MTDP和SSMT带远参
 SCHEDULED: <2024-05-02 Thu>
+** Done 数据整合并反演
+- State "Done"       from              [2024-11-16 Sat 20:50]
 ** Done 第一批15天远参数据处理测试
 SCHEDULED: <2024-06-01 Sat>
 - State "Done"       from              [2024-06-06 Thu 11:33]
 - 教会了王闻文MTDP的数据编辑原则，初步测试关键频带有明显改善。
-
 * STARTED 国自然面上-华南稳健聚焦反演
 ** TODO 江汉的复测点用MTDP重新处理
 SCHEDULED: <2024-05-01 Wed>
