@@ -11,7 +11,9 @@ DEADLINE: <2024-04-13 周六> SCHEDULED: <2024-04-13 周六>
 ** Done 未知名项目，最近汇报，探测深度800~1300m
 SCHEDULED: <2024-04-13 周六>
 - State "Done"       from "TODO"       [2024-04-14 周日 19:54]
-** WATTING BGP选地进行试验观测
+** CANCELLED BGP选地进行试验观测
+- State "CANCELLED"  from "WATTING"    [2024-12-25 Wed 01:44] \\
+  仪器没法调配，等2025年度找机会
 - State "WATTING"    from "WATTING"    [2024-04-26 Fri 21:33] \\
   鲍居彪已回复，涉及项目有长庆，二连，辽河，BGP先实验TXU-30发射机，科研部分可能会割一块给我
 - State "WATTING"    from              [2024-04-14 周日 22:16] \\
@@ -20,7 +22,8 @@ SCHEDULED: <2024-04-13 周六>
 * STARTED 贵州103项目
 ** Done 带远参数据处理(找孙台确认是否能找到剩下的远参)
 - State "Done"       from "TODO"       [2024-04-14 周日 19:54]
-** TODO EDI导出，初步完成相位张量计算（写代码）
+** Done EDI导出，初步完成相位张量计算（写代码）
+- State "Done"       from "TODO"       [2024-12-25 Wed 01:44]
 ** Done 修改会议纪要，并要求对方写合同补充协议函
 ** Done 双方拟定补充协议条款，走合同程序
 SCHEDULED: <2024-04-19 Fri>
