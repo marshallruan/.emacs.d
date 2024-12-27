@@ -9,14 +9,15 @@
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
-	   "straight/repos/straight.el/bootstrap.el"
-	   (or (bound-and-true-p straight-base-dir)
-	       user-emacs-directory)))
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
       (bootstrap-version 7))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/radian-software/straight.el/devlop/install.el" 'silent 'ihibit-cookies)
+        (url-retrieve-synchronously
+         "https://radian-software.github.io/straight.el/install.el"
+         'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
@@ -38,6 +39,7 @@
 ;设置字体
 (set-language-environment "UTF-8")
 
+;windows下字体要手动安装
 (set-face-attribute 'default nil :font "iosevka-14:weight=normal")
 
 (dolist (charset '(kana han cjk-misc bopomofo))
@@ -92,6 +94,14 @@
 ;然后在操作系统中把下载好的字体加入系统字体
 (use-package all-the-icons
   :ensure t)
+
+;安装councel，nerd-ivy依赖它
+(use-package counsel
+  :ensure t
+  :bind*
+  (("M-x"     . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)
+   ("C-x C-r" . counsel-recentf)))
 
 (use-package nerd-icons-ivy-rich
   :ensure t
@@ -335,6 +345,29 @@
   :ensure t)
 (use-package yasnippet
   :ensure t)
+
+
+;处理因为需要解压dz文件在win10或win11上导致的异常
+(defadvice jka-compr-info-compress-args (around eval-args activate)
+  "Evaluate program arguments"
+  (setq ad-return-value (mapcar 'eval (aref info 3))))
+
+(defadvice jka-compr-info-uncompress-args (around eval-args activate)
+  "Evaluate program arguments"
+  (setq ad-return-value (mapcar 'eval (aref info 6))))
+
+
+(add-to-list 'jka-compr-compression-info-list ["\\.dz\\'" "7z" "7z" ("-")
+                           "dz uncompress" "7z" (filename) nil t ""])
+
+(add-to-list 'auto-mode-alist '("\\.dz\\'" nil jka-compr))
+
+(add-to-list 'file-name-handler-alist '("\\.dz\\'" . jka-compr-handler))
+
+;注意FREEBSD下面用python pip install的basedpyright不工作
+;需要用nodejs的npm安装
+;windows下面则需要用python -m pip install pyright basedpyright
+;   用windows下的nodejs安装的pyright也不工作
 (use-package lsp-bridge
   :straight
   '(lsp-bridge
@@ -344,7 +377,10 @@
     :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
 	:build (:not compile))
   :init
-  (global-lsp-bridge-mode))
+  (global-lsp-bridge-mode)
+ ; :config
+ ; (setq lsp-bridge-python-lsp-server 'pyright))
+  )
 
 
 #+end_src
