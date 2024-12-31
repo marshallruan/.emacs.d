@@ -137,6 +137,26 @@
   (setq dashboard-startup-banner 'official)
   (dashboard-setup-startup-hook))
 
+;TAB-BAR设置
+(use-package centaur-tabs
+  :ensure t
+  :init
+  (setq centaur-tabs-enable-key-bindings t)
+  :config
+  (setq centaur-tabs-style "bar"
+	centaur-tabs-height 32
+	centaur-tabs-set-icons t
+	centaur-tabs-set-modified-marker t
+	centaur-tabs-show-new-tab-button t
+	centaur-tabs-show-navigation-buttons t
+	centaur-tabs-set-bar 'under
+	centaur-tabs-show-count nil
+	x-under-line-at-decent-line t
+	centaur-tabs-left-edge-margin nil)
+  (centaur-tabs-mode t)
+  :bind
+  ("C-<right>" . centaur-tabs-forward)
+  ("C-<left>" . centaur-tabs-backward))
 #+end_src
 
 * minibuffer设置
@@ -377,10 +397,7 @@
     :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
 	:build (:not compile))
   :init
-  (global-lsp-bridge-mode)
- ; :config
- ; (setq lsp-bridge-python-lsp-server 'pyright))
-  )
+  (global-lsp-bridge-mode))
 
 
 #+end_src
