@@ -201,9 +201,7 @@
   :ensure t
   :config
   (global-set-key (kbd "C-s") 'consult-line)
-  (global-set-key (kbd "M-s") 'consult-imenu)
-  :bind
-  ("C-c h" . consult-grep))
+  (global-set-key (kbd "M-s") 'consult-imenu))
 
 (use-package embark-consult
   :ensure t
@@ -245,7 +243,7 @@
     ((file-name (format-time-string "screenshot-%Y%m%d-%H%M%S.png"))
      (file-dir "img/")
      (file-path (concat default-directory file-dir file-name))
-     (tmp-path (if (eq system-name 'windows-nt)
+     (tmp-path (if (eq system-type 'windows-nt)
  		   (concat "c:/tmp/" file-name)
 		   (concat "/tmp/" file-name)))
      (copy-command (cond
@@ -268,6 +266,7 @@
  	               (t nil))))
    ;开始程序
    (progn
+     (print copy-command)
     (shell-command copy-command)    
     (if (eq 0 (shell-command check-command))
 	(progn
@@ -409,6 +408,7 @@
 (use-package which-key
   :ensure t
   :init (which-key-mode))
+
 #+end_src
 
 * 日程
