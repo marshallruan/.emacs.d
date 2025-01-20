@@ -56,12 +56,12 @@
 ;高亮当前行
 (global-hl-line-mode 1)
 
-;滚动条优化
-(use-package good-scroll
-  :ensure t
-  :if window-system
-  :init
-  (good-scroll-mode))
+;滚动条优化,可能有性能问题
+;; (use-package good-scroll
+;;   :ensure t
+;;   :if window-system
+;;   :init
+;;   (good-scroll-mode))
 
 
 ;多级彩虹括号
@@ -123,7 +123,8 @@
   :config
   (setq doom-themes-enable-bold t
 	  doom-themes-enable-italic t)
-  (load-theme 'doom-solarized-dark t)
+  ;(load-theme 'doom-solarized-dark t)
+  (load-theme 'doom-monokai-pro t)
   (doom-themes-visual-bell-config)
  (doom-themes-org-config))
 
@@ -190,13 +191,16 @@
   :bind
   (("C-." . embark-act)
    ("C-;" . embark-dwim)
+   ("C-c o" . embark-export)
    ("C-h B" . embark-bindings)))
 
 (use-package consult
   :ensure t
   :config
   (global-set-key (kbd "C-s") 'consult-line)
-  (global-set-key (kbd "M-s") 'consult-imenu))
+  (global-set-key (kbd "M-s") 'consult-imenu)
+  :bind
+  ("C-c h" . consult-grep))
 
 (use-package embark-consult
   :ensure t
@@ -207,20 +211,60 @@
 * org-mode相关
 #+begin_src emacs-lisp
 
-;org-mode标题栏显示
+					;org-mode标题栏显示
 (use-package org-bullets
   :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-;org-mode文字缩进
+					;org-mode文字缩进
 (setq org-startup-indented t)
 
-;org-mode模式下全行显示
+					;org-mode模式下全行显示
 (setq org-startup-truncated nil)
 
-;Latex和PDF
-;机器上需安装texlive且latex命令加入了环境变量
+					;org-mode设置显示图片的大小
+					;设置成nil表示在org文件中如果出现了#+ATTR_ORG width 400则显示宽度为400
+(setq org-image-actual-width nil)
+
+(setq org-startup-with-inline-images t)
+
+					;org-download插入屏幕截图，不用org-download包
+(defun my-org-clipboard-func()
+  (interactive)
+  (let*
+    ((file-dir (concat default-directory "img/"))
+     (file-name (format-time-string "screenshot-%Y%m%d-%H%M%S.png"))
+     (file-path (concat file-dir file-name))
+     (command (cond  ;按照不同的操作系统生成shell命令字符串
+	          ((eq system-type 'windows-nt)
+		   (concat "c:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+			   " -command \"(Get-Clipboard -Format Image).Save(\\\""
+			   file-path
+			   "\\\")\""))
+		  (t nil))))
+    ;如果command不是nil则执行后续代码；否则该操作系统的行为未定义
+    (if (eq command nil)
+	(message "have not define the shell command string on this OS: " system-type)
+      (progn
+	  (when (not (file-exists-p file-dir))
+	    (make-directory file-dir))
+	  (message command)
+	  (if (eq (shell-command command) 0)
+	    ;文件已经被正确的拷贝，此时插入org图片相关字符
+	    (progn
+	      (insert (concat "#+ATTR_ORG: :width 800\n"))
+            (org-indent-line)
+            (insert (concat "[[file:./img/" file-name "]] ")))
+	    (message "can not copy clipboard image into ./img/ folder!"))))))
+
+
+(add-hook 'org-mode-hook '(lambda ()
+                            (local-set-key (kbd "C-S-y") 'my-org-clipboard-func)))
+
+
+					;Latex和PDF
+					;机器上需安装texlive且latex命令加入了环境变量
 (require 'ox-latex)
 (setq org-latex-compiler "xelatex")
 (setq org-image-actrual-width nil)
@@ -241,7 +285,7 @@
                \\fancyhead[R]{\\leftmark}
             }
             \\pagestyle{plain}"
-           ("\\section{%s}" . "\\section*{%s}")
+               ("\\section{%s}" . "\\section*{%s}")
 	       ("\\subsection{%s}" . "\\subsection*{%s}")
 	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
@@ -336,7 +380,10 @@
   :hook
   (after-init . window-numbering-mode))
 
-
+;快捷键显示
+(use-package which-key
+  :ensure t
+  :init (which-key-mode))
 #+end_src
 
 * 日程
