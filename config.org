@@ -29,6 +29,8 @@
 #+begin_src emacs-lisp
 (tool-bar-mode -1)
 
+(menu-bar-mode -1)
+
 (scroll-bar-mode -1)
 
 (global-display-line-numbers-mode)
@@ -150,14 +152,15 @@
 	centaur-tabs-set-modified-marker t
 	centaur-tabs-show-new-tab-button t
 	centaur-tabs-show-navigation-buttons t
-	centaur-tabs-set-bar 'under
+	centaur-tabs-set-bar 'right
 	centaur-tabs-show-count nil
 	x-under-line-at-decent-line t
 	centaur-tabs-left-edge-margin nil)
-  (centaur-tabs-mode t)
+  (centaur-tabs-mode 1)
   :bind
   ("C-<right>" . centaur-tabs-forward)
   ("C-<left>" . centaur-tabs-backward))
+
 #+end_src
 
 * minibuffer设置
@@ -206,6 +209,7 @@
   :ensure t
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
+
 #+end_src
 
 * org-mode相关
@@ -229,38 +233,59 @@
 
 (setq org-startup-with-inline-images t)
 
-					;org-download插入屏幕截图，不用org-download包
-(defun my-org-clipboard-func()
+
+
+;org-download插入屏幕截图，不用org-download包
+;windows用powershell命令
+;freebsd和linux用xclip,有小问题，现在如果剪贴板是文本，那么在emacs里面执行xclip转图片会挂起
+;    因此只能用 timeout 0.5秒强行退出，有人说是因为xclip加-o时没有fclose()导致
+(defun my-org-copy-clipboard-image()
   (interactive)
   (let*
-    ((file-dir (concat default-directory "img/"))
-     (file-name (format-time-string "screenshot-%Y%m%d-%H%M%S.png"))
-     (file-path (concat file-dir file-name))
-     (command (cond  ;按照不同的操作系统生成shell命令字符串
-	          ((eq system-type 'windows-nt)
-		   (concat "c:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
-			   " -command \"(Get-Clipboard -Format Image).Save(\\\""
-			   file-path
-			   "\\\")\""))
-		  (t nil))))
-    ;如果command不是nil则执行后续代码；否则该操作系统的行为未定义
-    (if (eq command nil)
-	(message "have not define the shell command string on this OS: " system-type)
-      (progn
+    ((file-name (format-time-string "screenshot-%Y%m%d-%H%M%S.png"))
+     (file-dir "img/")
+     (file-path (concat default-directory file-dir file-name))
+     (tmp-path (if (eq system-name 'windows-nt)
+ 		   (concat "c:/tmp/" file-name)
+		   (concat "/tmp/" file-name)))
+     (copy-command (cond
+		       ((eq system-type 'windows-nt)
+	                (concat "c:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+		                " -command \"(Get-Clipboard -Format Image).Save(\\\""
+		                tmp-path
+		                "\\\")\""))
+	               ((or (eq system-type 'berkeley-unix)
+	                    (eq system-type 'gnu/linux))
+	                (concat "timeout 0.5 xclip -selection clipboard -t image/png -o > "
+			        tmp-path
+			        " &>/dev/null"))
+	                (t nil))) 
+     (check-command (cond
+		       ((eq system-type 'windows-nt)  "cls")
+      	       ((or (eq system-type 'berkeley-unix)
+	                    (eq system-type 'gnu/linux))
+	                (concat "identify " tmp-path))
+ 	               (t nil))))
+   ;开始程序
+   (progn
+    (shell-command copy-command)    
+    (if (eq 0 (shell-command check-command))
+	(progn
 	  (when (not (file-exists-p file-dir))
 	    (make-directory file-dir))
-	  (message command)
-	  (if (eq (shell-command command) 0)
-	    ;文件已经被正确的拷贝，此时插入org图片相关字符
+	  (if (eq (rename-file tmp-path file-path) nil)
 	    (progn
 	      (insert (concat "#+ATTR_ORG: :width 800\n"))
-            (org-indent-line)
+	      (org-indent-line)
             (insert (concat "[[file:./img/" file-name "]] ")))
-	    (message "can not copy clipboard image into ./img/ folder!"))))))
+	    (message "ERROR: move tmp image to ./img/ failure!")))
+      (progn
+	  (message "ERROR: not a image in clipboard, remove tmp file!")
+	  (delete-file tmp-path))))))
+	 
+;绑定为org-mode模式专有，CLRL+SHIFT+Y快捷键启动粘贴插入
+(define-key org-mode-map (kbd "C-S-y") 'my-org-copy-clipboard-image)
 
-
-(add-hook 'org-mode-hook '(lambda ()
-                            (local-set-key (kbd "C-S-y") 'my-org-clipboard-func)))
 
 
 					;Latex和PDF
