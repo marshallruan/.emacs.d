@@ -1,11 +1,12 @@
 * 包管理器
 #+begin_src emacs-lisp
-;设定软件源
+
+;; 设定软件源
 (use-package package
   :config
   (add-to-list 'package-archives '("melepa" . "https://melpa.org/packages/")))
 
-;安装staight.el包管理器
+;; 安装staight.el包管理器
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -27,52 +28,13 @@
 * UI显示 
 
 #+begin_src emacs-lisp
+;; 工具栏、菜单栏、垂直滚动条关掉，显示行号
 (tool-bar-mode -1)
-
 (menu-bar-mode -1)
-
 (scroll-bar-mode -1)
-
 (global-display-line-numbers-mode)
 
-;在Mode Line上显示列号
-(column-number-mode t)
-
-;设置字体
-(set-language-environment "UTF-8")
-
-;windows下字体要手动安装
-(set-face-attribute 'default nil :font "iosevka-14:weight=normal")
-
-(dolist (charset '(kana han cjk-misc bopomofo))
-  (set-fontset-font (frame-parameter nil 'font)
-		    charset
-		    (font-spec :family "Simsun" :size 34)))
-
-;更改光标样式
-(setq-default cursor-type 'bar)
-
-;关闭启动帮助画面
-(setq inhibit-splash-screen 1)
-
-;高亮当前行
-(global-hl-line-mode 1)
-
-;滚动条优化,可能有性能问题
-;; (use-package good-scroll
-;;   :ensure t
-;;   :if window-system
-;;   :init
-;;   (good-scroll-mode))
-
-
-;多级彩虹括号
-(use-package rainbow-delimiters
-  :ensure t
-  :hook
-  (prog-mode . rainbow-delimiters-mode))
-
-;显示列号
+;; 显示列号
 (use-package simple
   :ensure nil
   :hook
@@ -81,23 +43,46 @@
   (progn
     (setq column-number-mode t)))
 
+;; 设置字体
+;;   - windows下字体要手动安装
+;;   - bsd/linux下需事先安装windows宋体
+(set-language-environment "UTF-8")
+(set-face-attribute 'default nil :font "iosevka-14:weight=normal")
+(dolist (charset '(kana han cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font)
+		    charset
+		    (font-spec :family "Simsun" :size 34)))
 
-;mini-buffer上方标题栏的主题
+;; 更改光标样式
+(setq-default cursor-type 'bar)
+
+;; 关闭启动帮助画面
+(setq inhibit-splash-screen 1)
+
+;; 高亮当前行
+(global-hl-line-mode 1)
+
+
+;; 多级彩虹括号，非常有用
+(use-package rainbow-delimiters
+  :ensure t
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
+
+
+;; mini-buffer上方标题栏的主题
 (use-package doom-modeline
   :ensure t
   :init
-  (doom-modeline-mode 1)
-  :custom-face
-  (mode-line ((t (:height 0.9))))
-  (mode-line-inactive ((t (:height 0.9)))))
+  (doom-modeline-mode 1))
 
-;安装需要的图标和字体
-;激活后用M-x all-the-icons-install-fonts下载字体
-;然后在操作系统中把下载好的字体加入系统字体
+;; 安装需要的图标和字体
+;; 激活后用M-x all-the-icons-install-fonts下载字体
+;; 然后在操作系统中把下载好的字体加入系统字体
 (use-package all-the-icons
   :ensure t)
 
-;安装councel，nerd-ivy依赖它
+;; 安装councel，nerd-ivy依赖它
 (use-package counsel
   :ensure t
   :bind*
@@ -105,6 +90,7 @@
    ("C-x C-f" . counsel-find-file)
    ("C-x C-r" . counsel-recentf)))
 
+;; nerd-icons图标
 (use-package nerd-icons-ivy-rich
   :ensure t
   :init
@@ -119,7 +105,7 @@
    (setq ihibit-compacting-font-caches t))
 
 
-;使用doom系统主题
+;; 使用doom系统主题
 (use-package doom-themes
   :ensure t
   :config
@@ -130,7 +116,7 @@
   (doom-themes-visual-bell-config)
  (doom-themes-org-config))
 
-;启动界面
+;; 启动界面仪表盘
 (use-package dashboard
   :ensure t
   :config
@@ -140,7 +126,7 @@
   (setq dashboard-startup-banner 'official)
   (dashboard-setup-startup-hook))
 
-;TAB-BAR设置
+;; TAB-BAR设置
 (use-package centaur-tabs
   :ensure t
   :init
@@ -166,22 +152,26 @@
 * minibuffer设置
 
 #+begin_src emacs-lisp
+
+;; minibuffer的垂直补全模式
 (use-package vertico
   :ensure t
   :config
   (vertico-mode t))
 
-
+;; 可以按照非顺序的方式模糊搜索
 (use-package orderless
   :ensure t
   :config
-  (setq completion-styles '(orderless)))
+  (setq completion-styles '(orderless basic)))
 
+;; emacs分类和帮助信息的加强管理，与embark无缝集成
 (use-package marginalia
   :ensure t
   :config
   (marginalia-mode t))
 
+;; minibuffer管理系统，和其它组建集成
 (use-package embark
   :ensure t
   :init
@@ -197,12 +187,14 @@
    ("C-c o" . embark-export)
    ("C-h B" . embark-bindings)))
 
+;; 智能搜索，替代原生i-search
 (use-package consult
   :ensure t
   :config
   (global-set-key (kbd "C-s") 'consult-line)
   (global-set-key (kbd "M-s") 'consult-imenu))
 
+;; 用embark调用consult
 (use-package embark-consult
   :ensure t
   :hook
@@ -213,82 +205,82 @@
 * org-mode相关
 #+begin_src emacs-lisp
 
-					;org-mode标题栏显示
+;; org-mode小标题提示符美化
 (use-package org-bullets
   :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-					;org-mode文字缩进
+;; org-mode文字缩进
 (setq org-startup-indented t)
 
-					;org-mode模式下全行显示
+;; org-mode模式下全行显示
 (setq org-startup-truncated nil)
 
-					;org-mode设置显示图片的大小
-					;设置成nil表示在org文件中如果出现了#+ATTR_ORG width 400则显示宽度为400
+;; 设置显示图片的大小
+;; 设置成nil表示在org文件中如果出现了#+ATTR_ORG width 400则显示宽度为400
 (setq org-image-actual-width nil)
 
+;; 打开文档时自动显示内联图片
 (setq org-startup-with-inline-images t)
 
 
 
-;org-download插入屏幕截图，不用org-download包
-;windows用powershell命令
-;freebsd和linux用xclip,有小问题，现在如果剪贴板是文本，那么在emacs里面执行xclip转图片会挂起
-;    因此只能用 timeout 0.5秒强行退出，有人说是因为xclip加-o时没有fclose()导致
+;; org-download插入屏幕截图，不用org-download包
+;;   - windows用powershell命令
+;;   - freebsd和linux用xclip,有小问题，现在如果剪贴板是文本，那么在emacs里面执行xclip转图片会挂起
+;;     因此只能用 timeout 0.5秒强行退出，有人说是因为xclip加-o时没有fclose()导致
 (defun my-org-copy-clipboard-image()
   (interactive)
   (let*
-    ((file-name (format-time-string "screenshot-%Y%m%d-%H%M%S.png"))
-     (file-dir "img/")
-     (file-path (concat default-directory file-dir file-name))
-     (tmp-path (if (eq system-type 'windows-nt)
- 		   (concat "c:/tmp/" file-name)
+      ((file-name (format-time-string "screenshot-%Y%m%d-%H%M%S.png"))
+       (file-dir "img/")
+       (file-path (concat default-directory file-dir file-name))
+       (tmp-path (if (eq system-type 'windows-nt)
+ 		     (concat "c:/tmp/" file-name)
 		   (concat "/tmp/" file-name)))
-     (copy-command (cond
-		       ((eq system-type 'windows-nt)
-	                (concat "c:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
-		                " -command \"(Get-Clipboard -Format Image).Save(\\\""
-		                tmp-path
-		                "\\\")\""))
-	               ((or (eq system-type 'berkeley-unix)
-	                    (eq system-type 'gnu/linux))
-	                (concat "timeout 0.5 xclip -selection clipboard -t image/png -o > "
-			        tmp-path
-			        " &>/dev/null"))
-	                (t nil))) 
-     (check-command (cond
+       (copy-command (cond
+		      ((eq system-type 'windows-nt)
+	               (concat "c:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+		               " -command \"(Get-Clipboard -Format Image).Save(\\\""
+		               tmp-path
+		               "\\\")\""))
+	              ((or (eq system-type 'berkeley-unix)
+	                   (eq system-type 'gnu/linux))
+	               (concat "timeout 0.5 xclip -selection clipboard -t image/png -o > "
+			       tmp-path
+			       " &>/dev/null"))
+	              (t nil))) 
+       (check-command (cond
 		       ((eq system-type 'windows-nt)  "cls")
-      	       ((or (eq system-type 'berkeley-unix)
+      		       ((or (eq system-type 'berkeley-unix)
 	                    (eq system-type 'gnu/linux))
 	                (concat "identify " tmp-path))
  	               (t nil))))
-   ;开始程序
-   (progn
-     (print copy-command)
-    (shell-command copy-command)    
-    (if (eq 0 (shell-command check-command))
+    ;; 变量绑定结束，开始程序，命令行成功就插入，否则报错
+    (progn
+      (shell-command copy-command)    
+      (if (eq 0 (shell-command check-command))
+	  (progn
+	    (when (not (file-exists-p file-dir))
+	      (make-directory file-dir))
+	    (if (eq (rename-file tmp-path file-path) nil)
+		(progn
+		  (insert (concat "#+ATTR_ORG: :width 800\n"))
+		  (org-indent-line)
+		  (insert (concat "[[file:./img/" file-name "]] ")))
+	      (message "ERROR: move tmp image to ./img/ failure!")))
 	(progn
-	  (when (not (file-exists-p file-dir))
-	    (make-directory file-dir))
-	  (if (eq (rename-file tmp-path file-path) nil)
-	    (progn
-	      (insert (concat "#+ATTR_ORG: :width 800\n"))
-	      (org-indent-line)
-            (insert (concat "[[file:./img/" file-name "]] ")))
-	    (message "ERROR: move tmp image to ./img/ failure!")))
-      (progn
 	  (message "ERROR: not a image in clipboard, remove tmp file!")
 	  (delete-file tmp-path))))))
-	 
-;绑定为org-mode模式专有，CLRL+SHIFT+Y快捷键启动粘贴插入
+
+;; 把图片插入函数，绑定为org-mode模式专有，CLRL+SHIFT+Y快捷键启动粘贴插入
 (define-key org-mode-map (kbd "C-S-y") 'my-org-copy-clipboard-image)
 
 
 
-					;Latex和PDF
-					;机器上需安装texlive且latex命令加入了环境变量
+;; Latex和PDF导出
+;; 机器上需安装texlive且latex命令加入了环境变量
 (require 'ox-latex)
 (setq org-latex-compiler "xelatex")
 (setq org-image-actrual-width nil)
@@ -323,50 +315,42 @@
 
 #+begin_src emacs-lisp
 
-;emacs前询问是否确认
+;; emacs前询问是否确认
 (setq confirm-kill-emacs #'yes-or-no-p)
 
-;自动补全括号
-(electric-pair-mode t)
-
-;编程模式下，光标在一个括号时高亮另外一个
-(add-hook 'prog-mode-hook #'show-paren-mode)
-
-;当另一个程序更改文件后，Emacs及时刷新
+;; 当另一个程序更改文件后，Emacs及时刷新
 (global-auto-revert-mode t)
 
-;选中文本时输入文本会替换文本
+;; 选中文本时输入文本会替换文本
 (delete-selection-mode t)
 
-;关闭文件自动备份
+;; 关闭文件自动备份
 (setq make-backup-files nil)
 (setq auto-save-mode nil)
 
-;编程模式下，可折叠代码块
-(add-hook 'prog-mode-hook #'hs-minor-mode)
 
-;win10的C-SPC和系统输入法冲突，切换为C-x SPC
+;; win10的C-SPC和系统输入法冲突，切换为C-x SPC
 (global-unset-key (kbd "C-SPC"))
 (global-set-key (kbd "C-x SPC") 'set-mark-command)
 
-;取消系统铃声
+;; 取消系统铃声
 (setq ring-bell-funciton 'ignore)
 
-;设定启动时不显示警告信息
+;; 设定启动时不显示警告信息
 (setq inhibit-startup-message t)
 
-;增强C-a和C-e快捷键
+;; 增强C-a和C-e快捷键, 快速跳到行首行尾
 (use-package mwim
   :ensure t
   :bind
   (("C-a" . mwim-beginning-of-code-or-line)
    ("C-e" . mwim-end-of-code-or-line)))
 
-;增加重启emacs命令
+;; 增加重启emacs命令
 (use-package restart-emacs
   :ensure t)
 
-;打开历史文件
+;; 打开历史文件
 (use-package savehist
   :ensure nil
   :hook
@@ -381,13 +365,13 @@
 					extended-command-history)
 	savehist-autosave-interval 300))
 
-;保存上次光标所在位置
+;; 保存上次光标所在位置
 (use-package saveplace
   :ensure nil
   :hook
   (after-init . save-place-mode))
 
-;优化undo操作
+;; 优化undo操作
 (use-package undo-tree
   :ensure t
   :init
@@ -397,14 +381,14 @@
   ;(setq evil-undo-system 'undo-tree)
 )
 
-;窗口管理，使用M-数字切换窗口
+;; 窗口管理，使用M-数字切换窗口
 (use-package window-numbering
   :ensure t
   :init
   :hook
   (after-init . window-numbering-mode))
 
-;快捷键显示
+;; 快捷键显示，快速查找
 (use-package which-key
   :ensure t
   :init (which-key-mode))
@@ -414,12 +398,12 @@
 * 日程
 #+begin_src emacs-lisp
 
-;日程管理常用快捷键
+;; 日程管理常用快捷键
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "STARTED(s)" "|" "Done(d!/!)")
               (sequence "WATTING(w@/!)" "SOMEDAY(s)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
 
-;org-agenda设置
+;; org-agenda设置
 (global-set-key (kbd "C-c a") 'org-agenda)
 (setq org-agenda-files '("~/.emacs.d/gtd.org"))
 (setq org-agenda-span 'day)
@@ -430,16 +414,26 @@
 
 #+begin_src emacs-lisp
 
-;使用lsp-bridge代替company
-;需要安装python相应模块，需要Node，pyright
-;需要安装markdown-moe和yasnippet的emacs模块
+;; 自动补全括号
+(electric-pair-mode t)
+
+;; 编程模式下，光标在一个括号时高亮另外一个
+(add-hook 'prog-mode-hook #'show-paren-mode)
+
+;; 编程模式下，可折叠代码块
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+
+
+;; 使用lsp-bridge代替company
+;; 需要安装python相应模块，需要Node，pyright
+;; 需要安装markdown-moe和yasnippet的emacs模块
 (use-package markdown-mode
   :ensure t)
 (use-package yasnippet
   :ensure t)
 
 
-;处理因为需要解压dz文件在win10或win11上导致的异常
+;; 处理因为需要解压dz文件在win10或win11上导致的异常
 (defadvice jka-compr-info-compress-args (around eval-args activate)
   "Evaluate program arguments"
   (setq ad-return-value (mapcar 'eval (aref info 3))))
@@ -450,16 +444,16 @@
 
 
 (add-to-list 'jka-compr-compression-info-list ["\\.dz\\'" "7z" "7z" ("-")
-                           "dz uncompress" "7z" (filename) nil t ""])
+					       "dz uncompress" "7z" (filename) nil t ""])
 
 (add-to-list 'auto-mode-alist '("\\.dz\\'" nil jka-compr))
 
 (add-to-list 'file-name-handler-alist '("\\.dz\\'" . jka-compr-handler))
 
-;注意FREEBSD下面用python pip install的basedpyright不工作
-;需要用nodejs的npm安装
-;windows下面则需要用python -m pip install pyright basedpyright
-;   用windows下的nodejs安装的pyright也不工作
+;; 注意FREEBSD下面用python pip install的basedpyright不工作
+;; 需要用nodejs的npm安装
+;; windows下面则需要用python -m pip install pyright basedpyright
+;;    用windows下的nodejs安装的pyright也不工作
 (use-package lsp-bridge
   :straight
   '(lsp-bridge
@@ -467,7 +461,7 @@
     :host github
     :repo "manateelazycat/lsp-bridge"
     :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
-	:build (:not compile))
+    :build (:not compile))
   :init
   (global-lsp-bridge-mode))
 
