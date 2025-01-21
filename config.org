@@ -423,6 +423,21 @@
 ;; 编程模式下，可折叠代码块
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
+;; 快速跳转到某行
+(use-package avy
+  :ensure t
+  :bind
+  ;("M-g a" . avy-goto-char)
+  ;("M-g s" . avy-goto-char-2)
+  ("C-l" . avy-goto-line))
+
+(use-package highlight-symbol
+  :ensure t
+  :init
+  (highlight-symbol-mode)
+  :bind
+  ("C-c h" . highlight-symbol))
+
 
 ;; 使用lsp-bridge代替company
 ;; 需要安装python相应模块，需要Node，pyright
