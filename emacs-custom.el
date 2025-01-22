@@ -4,6 +4,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(custom-safe-themes
+   '("7964b513f8a2bb14803e717e0ac0123f100fb92160dcf4a467f530868ebaae3e" "8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098" default))
  '(global-display-line-numbers-mode t)
  '(package-selected-packages
    '(solarized-theme simple-httpd ox-publish org-bullets counsel-projectile benchmark-init package-load-metrics package-load-metrcs org-tempo org-checklist evil-multiedit evil-matchit iedit evil-snipe evil-nerd-commenter evil-surround evil-collection evil-tutor-sc evil zenburn-theme window-numbering vertico undo-tree treemacs-projectile restart-emacs rainbow-delimiters popper orderless nerd-icons-ivy-rich mwim marginalia magit lsp-treemacs good-scroll embark-consult doom-themes doom-modeline dashboard counsel company-box all-the-icons))
