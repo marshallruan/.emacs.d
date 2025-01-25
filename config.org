@@ -487,7 +487,15 @@
 (use-package geiser-chez
   :ensure t
   :bind
-  ("<f2>" . 'geiser-eval-last-sexp))
+  ("<f2>" . 'geiser-eval-last-sexp)
+  :config
+  (setq geiser-chez-binary
+	(cond ((eq system-type 'windows-nt)
+	       "c:/Program Files/Chez Scheme 10.1/bin/ta6nt/scheme.exe")
+	      ((eq system-type 'berkeley-unix)
+	       "/usr/local/bin/chez-scheme")
+	      (t nil))))
+		   
 
 ;; 括号高级操作
 (use-package paredit
