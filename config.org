@@ -482,4 +482,17 @@
   (global-lsp-bridge-mode))
 
 
+
+;; scheme语言支持，实现用chez scheme
+(use-package geiser-chez
+  :ensure t
+  :bind
+  ("<f2>" . 'geiser-eval-last-sexp))
+
+;; 括号高级操作
+(use-package paredit
+  :ensure t)
+  
+
+
 #+end_src
