@@ -51,7 +51,7 @@
 (dolist (charset '(kana han cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
 		    charset
-		    (font-spec :family "Simsun" :size 34)))
+		    (font-spec :family "SimSun")))
 
 ;; 更改光标样式
 (setq-default cursor-type 'bar)
@@ -491,7 +491,7 @@
   :config
   (setq geiser-chez-binary
 	(cond ((eq system-type 'windows-nt)
-	       "c:/Program Files/Chez Scheme 10.1/bin/ta6nt/scheme.exe")
+	       "c:/Program Files/Chez Scheme 10.1.0/bin/ta6nt/scheme.exe")
 	      ((eq system-type 'berkeley-unix)
 	       "/usr/local/bin/chez-scheme")
 	      (t nil))))
