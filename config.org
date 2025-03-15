@@ -70,6 +70,9 @@
 ;; 高亮当前行
 (global-hl-line-mode 1)
 
+;; 允许加载自定义主题，不提示load run lisp code的警告
+(setq custom-safe-themes t)
+
 
 ;; 多级彩虹括号，非常有用
 (use-package rainbow-delimiters
@@ -113,18 +116,16 @@
    (setq ihibit-compacting-font-caches t))
 
 
+
 ;; 使用doom系统主题
 (use-package doom-themes
   :ensure t
   :config
   (setq doom-themes-enable-bold t
 	  doom-themes-enable-italic t)
-  ;(load-theme 'doom-solarized-dark t)
-  ;(load-theme 'doom-material-dark)
-  (load-theme 'doom-monokai-machine t)
-  ;(load-theme 'doom-solarized-light)
+  (load-theme 'doom-monokai-pro t)
   (doom-themes-visual-bell-config)
- (doom-themes-org-config))
+  (doom-themes-org-config))
 
 ;; 启动界面仪表盘
 (use-package dashboard
@@ -399,7 +400,7 @@
   :ensure t
   :init
   (global-undo-tree-mode)
-  (global-set-key (kbd "C-x u")  nil)
+  (define-key undo-tree-map (kbd "C-x u") nil)
   :after
   hydra
   :bind
@@ -479,6 +480,18 @@
   (highlight-symbol-mode)
   :bind
   ("C-c h" . highlight-symbol))
+
+;; 函数列表
+(use-package imenu-list
+  :ensure t
+  :init
+  (add-hook 'imenu-list-after-jump-hook #'recenter-top-bottom)
+  :bind
+  (:map global-map ("C-c f" . imenu-list-smart-toggle))
+  :config
+  (setq imenu-list-focus-after-activation t)
+  (setq imenu-list-auto-resize t)
+  (setq imenu-list-after-jump-hook nil))
 
 
 ;; 使用lsp-bridge代替company
