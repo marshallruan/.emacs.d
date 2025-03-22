@@ -116,16 +116,27 @@
    (setq ihibit-compacting-font-caches t))
 
 
-
-;; 使用doom系统主题
-(use-package doom-themes
+;;使用modus-themes
+(use-package modus-themes
   :ensure t
   :config
-  (setq doom-themes-enable-bold t
-	  doom-themes-enable-italic t)
-  (load-theme 'doom-monokai-pro t)
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
+  (setq modus-themes-italic-constructs t
+	  modus-themes-bold-constucts nil)
+
+  (setq modus-themes-common-palette-overrides
+	  modus-themes-preset-overrides-intense)
+
+  (load-theme 'modus-operandi))
+
+;; 使用doom系统主题
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   (setq doom-themes-enable-bold t
+;; 	  doom-themes-enable-italic t)
+;;   (load-theme 'doom-monokai-pro t)
+;;   (doom-themes-visual-bell-config)
+;;   (doom-themes-org-config))
 
 ;; 启动界面仪表盘
 (use-package dashboard
@@ -403,6 +414,8 @@
   (define-key undo-tree-map (kbd "C-x u") nil)
   :after
   hydra
+  :config
+  (setq undo-tree-auto-save-history nil)
   :bind
   (("C-x u" . hydra-undo-tree/body))
   :hydra

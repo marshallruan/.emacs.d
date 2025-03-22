@@ -119,9 +119,10 @@ SCHEDULED: <2025-02-21 周五>
 - State "Done"       from "TODO"       [2025-02-25 周二 10:59]
 ** Done 课题负责人介绍会
 SCHEDULED: <2025-03-05 周三>
-** TODO 课题内部讨论会-3月9日
+** Done 课题内部讨论会-3月9日
 
 
+- State "Done"       from "TODO"       [2025-03-21 Fri 21:51]
 - State "Done"       from "TODO"       [2025-03-09 周日 19:29]
 * STARTED 大地电磁网
 ** Done 修改三个标准，特殊地区施工标准，电极距，点位偏离等
@@ -142,5 +143,7 @@ SCHEDULED: <2025-03-05 周三>
 
 - State "Done"       from "TODO"       [2025-03-09 周日 19:27]
 
-** TODO auto-rank算法的拟合部分提速
-** TODO 标准最后一次大修
+** Done auto-rank算法的拟合部分提速
+- State "Done"       from "TODO"       [2025-03-18 Tue 21:10]
+** Done 标准最后一次大修
+- State "Done"       from "TODO"       [2025-03-18 Tue 21:10]
