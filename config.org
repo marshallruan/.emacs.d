@@ -312,7 +312,31 @@
 ;; 把图片插入函数，绑定为org-mode模式专有，CLRL+SHIFT+Y快捷键启动粘贴插入
 (define-key org-mode-map (kbd "C-S-y") 'my-org-copy-clipboard-image)
 
-
+;;在emacs里面打开pdf文件
+(use-package pdf-tools
+  :ensure t
+  :init
+  (cond
+   ((eq system-type 'windows-nt)
+    (progn
+      (setenv "PATH" (concat "C:\\msys64\\mingw64\\bin" ";" (getenv "PATH")))
+      (pdf-loader-install)
+      (setq pdf-info-epdfinfo-program "C:\\msys64\\mingw64\\bin\\epdfinfo.exe")))
+   (t (pdf-loader-install)))
+  (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
+  
+;;实现emacs里面pdf的文字拷贝
+(defun pdf-view-kill-rmn-ring-save ()
+  "Copy the region to the `kill-ring' after remove all newline characters."
+  (interactive)
+  (pdf-view-assert-active-region)
+  (let* ((txt (replace-regexp-in-string "\n" " "
+        (car (pdf-view-active-region-text)))))
+    (pdf-view-deactivate-region)
+	(kill-new txt)))
+(use-package pdf-view-mode
+  :bind
+  ("C-c C-w" . pdf-view-kill-rmn-ring-save))
 
 ;; Latex和PDF导出
 ;; 机器上需安装texlive且latex命令加入了环境变量
@@ -350,6 +374,10 @@
 
 #+begin_src emacs-lisp
 
+;;dired-mode递归删除或拷贝目录
+(setq dired-recursive-deletes 'always)
+(setq dired-recursive-copies 'always)
+
 ;; emacs前询问是否确认
 (setq confirm-kill-emacs #'yes-or-no-p)
 
@@ -385,6 +413,7 @@
 (use-package restart-emacs
   :ensure t)
 
+
 ;; 打开历史文件
 (use-package savehist
   :ensure nil
@@ -406,26 +435,26 @@
   :hook
   (after-init . save-place-mode))
 
-;; 优化undo操作
-(use-package undo-tree
-  :ensure t
-  :init
-  (global-undo-tree-mode)
-  (define-key undo-tree-map (kbd "C-x u") nil)
-  :after
-  hydra
-  :config
-  (setq undo-tree-auto-save-history nil)
-  :bind
-  (("C-x u" . hydra-undo-tree/body))
-  :hydra
-  (hydra-undo-tree (:hint nil)
-		   ("p" undo-tree-undo "undo" :color white)
-		   ("n" undo-tree-redo "redo" :color white)
-		   ("s" undo-tree-save-history "save" :color white)
-		   ("l" undo-tree-load-history "load" :color white)
-		   ("u" undo-tree-visualize "visualize" :color blue)
-		   ("q" nil "quit" :color blue)))
+;; 优化undo操作dfjkdjfkdfkdk
+;; (use-package undo-tree
+;;   :ensure t
+;;   :init
+;;   (global-undo-tree-mode)
+;;   (define-key undo-tree-map (kbd "C-x u") nil)
+;;   :after
+;;   hydra
+;;   :config
+;;   (setq undo-tree-auto-save-history nil)
+;;   :bind
+;;   (("C-x u" . hydra-undo-tree/body))
+;;   :hydra
+;;   (hydra-undo-tree (:hint nil)
+;; 		   ("p" undo-tree-undo "undo" :color white)
+;; 		   ("n" undo-tree-redo "redo" :color white)
+;; 		   ("s" undo-tree-save-history "save" :color white)
+;; 		   ("l" undo-tree-load-history "load" :color white)
+;; 		   ("u" undo-tree-visualize "visualize" :color blue)
+;; 		   ("q" nil "quit" :color blue)))
 
 ;; 窗口管理，使用M-数字切换窗口
 (use-package window-numbering

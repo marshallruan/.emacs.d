@@ -120,8 +120,11 @@ SCHEDULED: <2025-02-21 周五>
 ** Done 课题负责人介绍会
 SCHEDULED: <2025-03-05 周三>
 ** Done 课题内部讨论会-3月9日
+** Done 根据江老师要求将来研究内容删减到3000字内，加上国重简介，加上课题的研究方法和可行性分析
+** TODO 请赵老师帮忙预算700W，按江老师要求补充需要的内容
 
 
+- State "Done"       from "TODO"       [2025-04-13 Sun 00:00]
 - State "Done"       from "TODO"       [2025-03-21 Fri 21:51]
 - State "Done"       from "TODO"       [2025-03-09 周日 19:29]
 * STARTED 大地电磁网
@@ -147,3 +150,6 @@ SCHEDULED: <2025-03-05 周三>
 - State "Done"       from "TODO"       [2025-03-18 Tue 21:10]
 ** Done 标准最后一次大修
 - State "Done"       from "TODO"       [2025-03-18 Tue 21:10]
+** Done LEMI进行室内测试，开始采购太阳能控制器，要求低温10度正常工作
+- State "Done"       from "TODO"       [2025-04-12 Sat 23:59]
+** TODO 去苏尼特右旗安装LEMI长周期台 
